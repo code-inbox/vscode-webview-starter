@@ -1,17 +1,29 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
+import fs from "fs"
+import path from "path"
 
 class ViewProvider implements vscode.WebviewViewProvider {
-  public static viewType: string = "ping.list"
-  public static title: string = "Ping"
-
+  readonly viewId: string
+  readonly title: string
+  readonly entryPoint: string
   private extensionContext: vscode.ExtensionContext
   private webview: vscode.Webview | undefined
 
-  constructor(extensionContext: vscode.ExtensionContext) {
+  constructor(id: string, extensionContext: vscode.ExtensionContext) {
     this.extensionContext = extensionContext
-    console.log("ViewProvider constructed")
+    this.viewId = id
+    this.title = id
+    this.entryPoint = `dist/${id}.js`
+  }
+
+  public register() {
+    this.extensionContext.subscriptions.push(
+      vscode.window.registerWebviewViewProvider(this.viewId, this, {
+        webviewOptions: {
+          retainContextWhenHidden: true,
+        },
+      })
+    )
   }
 
   public resolveWebviewView(
@@ -19,7 +31,6 @@ class ViewProvider implements vscode.WebviewViewProvider {
     context_: vscode.WebviewViewResolveContext<unknown>,
     token: vscode.CancellationToken
   ): void | Thenable<void> {
-    console.log("ViewProvider resolveWebviewView")
     webviewView.webview.options = {
       enableScripts: true,
     }
@@ -36,14 +47,12 @@ class ViewProvider implements vscode.WebviewViewProvider {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
         <meta name="theme-color" content="#000000">
-        <title>${ViewProvider.title}</title>
+        <title>${this.title}</title>
   
         <meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https://api.rollbar.com/; img-src vscode-resource: vscode-webview: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">
       </head>
   
-      <body data-view-type="${
-        ViewProvider.viewType
-      }" style="background: #1D1F29;">
+      <body data-view-type="${this.viewId}" style="background: #1D1F29;">
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
 
@@ -60,7 +69,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
   private getWebviewUri() {
     const uri = vscode.Uri.joinPath(
       this.extensionContext.extensionUri,
-      "dist/index.js"
+      this.entryPoint
     )
     return this.webview?.asWebviewUri(uri).toString()
   }
@@ -75,24 +84,14 @@ class ViewProvider implements vscode.WebviewViewProvider {
   }
 }
 
-class ListViewProvider extends ViewProvider {
-  static title = "overriden"
-  static viewType = "list"
-}
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  const viewProvider = new ListViewProvider(context)
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      ViewProvider.viewType,
-      viewProvider,
-      {
-        webviewOptions: {
-          retainContextWhenHidden: true,
-        },
-      }
-    )
-  )
+  // list all paths in "src/views" directory
+  const viewsPaths = fs.readdirSync(path.resolve(__dirname, "../src/views"))
+  viewsPaths.forEach((viewPath) => {
+    const viewId = viewPath.split(".")[0]
+    const viewProvider = new ViewProvider(viewId, context)
+    viewProvider.register()
+  })
 }

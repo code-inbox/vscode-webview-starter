@@ -9,10 +9,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run setup && vite build",
     "preview": "vite preview",
-    "start": "vite build --watch",
-    "open": "code --extensionDevelopmentPath=${PWD}"
+    "start": "npm run setup && vite build --watch",
+    "open": "code --extensionDevelopmentPath=${PWD}",
+    "setup": "node dynamic-contributes.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
     "@types/node": "^20.4.5",
     "@types/vscode": "^1.80.0",
     "@vitejs/plugin-react": "^4.0.3",
+    "glob": "^10.3.3",
     "vite": "^4.4.7"
   },
   "dependencies": {
@@ -34,17 +36,29 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "ping",
-          "title": "Ping",
+          "id": "container",
+          "title": "Extension Starter",
           "icon": "public/bell.svg"
         }
       ]
     },
     "views": {
-      "ping": [
+      "container": [
         {
-          "id": "ping.list",
-          "name": "Notifications",
+          "id": "box",
+          "name": "box",
+          "type": "webview",
+          "initialSize": 4
+        },
+        {
+          "id": "charts",
+          "name": "charts",
+          "type": "webview",
+          "initialSize": 4
+        },
+        {
+          "id": "list",
+          "name": "list",
           "type": "webview",
           "initialSize": 4
         }
