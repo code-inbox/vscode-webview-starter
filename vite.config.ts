@@ -1,18 +1,19 @@
 import { builtinModules } from "module"
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
+import { UserConfig, defineConfig } from "vite"
 import { glob } from "glob"
 import path from "path"
+import getFrameworkViews from "./scripts/getFrameworkViews"
 
-export default defineConfig({
-  plugins: [react()],
+require("dotenv").config()
+
+const baseConfig: UserConfig = {
   build: {
     outDir: "./dist",
     lib: {
-      entry: glob.sync([
+      entry: [
         path.resolve(__dirname, "src/extension.ts"),
-        path.resolve(__dirname, "src/views/*.tsx"),
-      ]),
+        ...getFrameworkViews().map(view => view.path),
+      ],
       formats: ["cjs", "es"],
       fileName: (format, name) => {
         if (name === "extension")
@@ -33,4 +34,23 @@ export default defineConfig({
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     },
   },
+}
+
+export default defineConfig(async (params) => {
+  const { default: frameworkConfig } = await import(
+    `./frameworks/${process.env.FRAMEWORK || "react"}.js`
+  )
+  if (!process.env.FRAMEWORK)
+    console.warn("No framework specified, using React...")
+  if (typeof frameworkConfig === "function") {
+    const config = await frameworkConfig(params)
+    return {
+      ...baseConfig,
+      ...config,
+    }
+  }
+  return {
+    ...baseConfig,
+    ...frameworkConfig,
+  }
 })

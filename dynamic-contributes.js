@@ -1,13 +1,14 @@
 const fs = require("fs")
 const path = require("path")
+const getFrameworkViews = require("./scripts/getFrameworkViews")
 
 const saveFile = fs.writeFileSync
 
-const viewsPaths = fs.readdirSync(path.resolve(__dirname, "src/views"))
+const viewsPaths = getFrameworkViews()
 const json = require(path.resolve("package.json"))
 json.contributes.views.container = []
 
-viewsPaths.forEach((viewPath) => {
+viewsPaths.forEach(({ name: viewPath }) => {
   const viewName = viewPath.split(".")[0]
   json.contributes.views.container.push({
     id: viewName,
