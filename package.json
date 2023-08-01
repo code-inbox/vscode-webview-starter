@@ -2,16 +2,15 @@
   "name": "vscode_starter",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/extension.js",
+  "main": "dist/node/extension.js",
   "engines": {
     "vscode": "^1.74.0"
   },
+  "module": "dist",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite",
-    "build": "npm run setup && vite build",
-    "preview": "vite preview",
-    "start": "npm run setup && vite build --watch",
+    "build": "npm run setup && node build.js",
+    "start": "npm run setup && node build.js --watch",
     "open": "code --extensionDevelopmentPath=${PWD}",
     "setup": "node dynamic-contributes.js"
   },
@@ -21,6 +20,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.3",
     "@types/node": "^20.4.5",
+    "@types/react": "^18.2.18",
     "@types/vscode": "^1.80.0",
     "@vitejs/plugin-react": "^4.0.3",
     "dotenv": "^16.3.1",
@@ -30,7 +30,9 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "svelte": "^4.1.1"
+    "serve": "^14.2.0",
+    "svelte": "^4.1.1",
+    "watch": "^1.0.2"
   },
   "activationEvents": [
     "onStartupFinished"
@@ -50,6 +52,12 @@
         {
           "id": "box",
           "name": "box",
+          "type": "webview",
+          "initialSize": 4
+        },
+        {
+          "id": "box2",
+          "name": "box2",
           "type": "webview",
           "initialSize": 4
         }
