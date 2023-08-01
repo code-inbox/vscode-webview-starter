@@ -15,7 +15,6 @@ const isWatch = process.argv.includes("--watch")
         path.join(__dirname, "dist"),
         { recursive: true },
         (event, filename) => {
-            console.log('suppp', event, filename)
           if (event === "rename") {
             watcher.close()
             resolve(filename)
@@ -54,13 +53,15 @@ const isWatch = process.argv.includes("--watch")
         return build({
           build: {
             lib: {
-              formats: ["es"],
+              formats: ["es", "cjs"],
+              fileName: (format, name) => format === "cjs" ? `${name}.cjs` : `${name}.js`,
             },
             rollupOptions: {
               input: f.path,
               output: {
                 format: "esm",
                 dir: path.join(__dirname, "dist/chromium"),
+                // exports: "named",
               },
             },
             watch: isWatch ? {} : null,

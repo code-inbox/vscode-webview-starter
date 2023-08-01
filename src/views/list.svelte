@@ -1,5 +1,5 @@
 <script>
-  let string = `This is rendered by Svelte`
+  let string = `This is rendered by Svelte.`
 </script>
 
 <div>

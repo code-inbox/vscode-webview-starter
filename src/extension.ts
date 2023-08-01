@@ -1,19 +1,35 @@
 import * as vscode from "vscode"
 import fs from "fs"
 import path from "path"
+import {Store, getStore} from "./state"
 
 class ViewProvider implements vscode.WebviewViewProvider {
     public readonly viewId: string
     public readonly title: string
     public readonly entryPoint: string
+    public commandHandler: Record<string, any> = {}
     private extensionContext: vscode.ExtensionContext
     private webview: vscode.Webview | undefined
+    private store: Store | undefined
 
     constructor(id: string, extensionContext: vscode.ExtensionContext) {
         this.extensionContext = extensionContext
         this.viewId = id
         this.title = id
         this.entryPoint = `dist/chromium/${id}.js`
+        // look for any exports named "commands" in the entry point
+        try {
+            const commands = require(vscode.Uri.joinPath(
+                this.extensionContext.extensionUri,
+                `dist/chromium/${id}.cjs`
+            ).path)
+            if (commands.commands) {
+                this.commandHandler = commands.commands
+            }
+        } catch (e) {
+            console.error(e)
+        }
+
         if (extensionContext.extensionMode === vscode.ExtensionMode.Development) {
             fs.watchFile(this.getFsPath().path, () => {
                 this.render()
@@ -31,6 +47,9 @@ class ViewProvider implements vscode.WebviewViewProvider {
         )
     }
 
+    public init() {
+    }
+
     public resolveWebviewView(
         webviewView: vscode.WebviewView,
         context_: vscode.WebviewViewResolveContext<unknown>,
@@ -40,6 +59,10 @@ class ViewProvider implements vscode.WebviewViewProvider {
             enableScripts: true,
         }
         this.webview = webviewView.webview
+        if (!this.store) {
+            this.store = getStore(this.webview)
+        }
+
         this.render()
     }
     public render(data = {}) {
@@ -102,9 +125,10 @@ export function activate(context: vscode.ExtensionContext) {
     // list all paths in "src/views" directory
     const viewsPaths = fs.readdirSync(path.resolve(__dirname, "../../src/views"))
     const viewsIds = viewsPaths.map((viewPath) => viewPath.split(".")[0])
-    viewsIds.forEach((viewId) => {
+    const providers = viewsIds.map((viewId) => {
         const viewProvider = new ViewProvider(viewId, context)
         viewProvider.register()
+        return viewProvider
     })
 
     if (context.extensionMode === vscode.ExtensionMode.Development) {
@@ -112,4 +136,19 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.commands.executeCommand('workbench.action.reloadWindow');
         })
     }
+
+
+    // TODO: remove below
+
+    const command = 'myExtension.sayHello';
+
+    const commandHandler = () => {
+        providers.forEach(provider => {
+            if (provider.commandHandler[command]) {
+                provider.commandHandler[command]()
+            }
+        })
+    };
+
+    context.subscriptions.push(vscode.commands.registerCommand(command, commandHandler));
 }
