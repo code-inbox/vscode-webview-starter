@@ -9,41 +9,43 @@ type PersistImpl = <S>(
     env: vscode.Webview | undefined
 ) => StateCreator<S, [], []>
 
-let hasLoaded = false;
-let messenger: Messenger;
 
-const ipc: PersistImpl = (config, env) => (set, get, api) => {
-    if (!messenger) {
-        if (!env) {
-            if (typeof window === "undefined") {
-                throw new Error("No window")
+const ipc: PersistImpl = (config, env) => {
+    let hasLoaded = false;
+    let messenger: Messenger;
+    return (set, get, api) => {
+        if (!messenger) {
+            if (!env) {
+                if (typeof window === "undefined") {
+                    throw new Error("No window")
+                }
+                const webviewApi = "acquireVsCodeApi" in window ? (window as any).acquireVsCodeApi() : undefined
+                if (!webviewApi) {
+                    throw new Error("No webview api")
+                }
+                messenger = new Messenger(webviewApi)
+            } else {
+                messenger = new Messenger(env);
             }
-            const webviewApi = "acquireVsCodeApi" in window ? (window as any).acquireVsCodeApi() : undefined
-            if (!webviewApi) {
-                throw new Error("No webview api")
-            }
-            messenger = new Messenger(webviewApi)
-        } else {
-            messenger = new Messenger(env);
         }
+        if (!hasLoaded) {
+            messenger.listen((state) => {
+                console.log(`  received by ${messenger.type}`, state);
+                set(state)
+                console.log(`  new state on ${messenger.type}`, get());
+            })
+        }
+        hasLoaded = true;
+        return config(
+            (...args) => {
+                set(...args)
+                console.log(`broadcasting from ${messenger.type}`, get())
+                messenger.post(get())
+            },
+            get,
+            api
+        )
     }
-    if (!hasLoaded) {
-        messenger.listen((state) => {
-            console.log(`  received by ${messenger.type}`, state);
-            set(state)
-            console.log(`  new state on ${messenger.type}`, get());
-        })
-    }
-    hasLoaded = true;
-    return config(
-        (...args) => {
-            set(...args)
-            console.log(`broadcasting from ${messenger.type}`, get())
-            messenger.post(get())
-        },
-        get,
-        api
-    )
 }
 
 class Messenger {
