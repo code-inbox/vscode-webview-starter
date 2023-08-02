@@ -138,18 +138,31 @@ export function activate(context: vscode.ExtensionContext) {
         })
     }
 
-
-    // TODO: remove below
-
-    const command = 'myExtension.sayHello';
-
-    const commandHandler = () => {
-        providers.forEach(provider => {
-            if (provider.commandHandler[command]) {
-                provider.commandHandler[command]()
+    // here we want to go through all possible registered commands and register them
+    Promise.all(providers.map(provider => {
+        return import(vscode.Uri.joinPath(
+            context.extensionUri,
+            `dist/chromium/${provider.viewId}.static.js`
+        ).path).then(({commands}) => {
+            if (!commands) {
+                return
             }
+            return Object.keys(commands)
         })
-    };
-
-    context.subscriptions.push(vscode.commands.registerCommand(command, commandHandler));
+    })).then(commands => {
+        return [...new Set(commands.flat())]
+    }).then(commands => {
+        commands.forEach(command => {
+            if (!command) {
+                return
+            }
+            context.subscriptions.push(vscode.commands.registerCommand(command, () => {
+                providers.forEach(provider => {
+                    if (provider.commandHandler[command]) {
+                        provider.commandHandler[command]()
+                    }
+                })
+            }))
+        })
+    })
 }

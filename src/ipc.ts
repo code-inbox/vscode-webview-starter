@@ -9,10 +9,10 @@ type PersistImpl = <S>(
     env: vscode.Webview | undefined
 ) => StateCreator<S, [], []>
 
+let hasLoaded = false;
+let messenger: Messenger;
 
 const ipc: PersistImpl = (config, env) => {
-    let hasLoaded = false;
-    let messenger: Messenger;
     return (set, get, api) => {
         if (!messenger) {
             if (!env) {
@@ -27,6 +27,9 @@ const ipc: PersistImpl = (config, env) => {
             } else {
                 messenger = new Messenger(env);
             }
+        } else if (env) {
+            // means we are in node and want to attach another client to the current messenger
+            messenger.addClient(env)
         }
         if (!hasLoaded) {
             messenger.listen((state) => {
@@ -36,6 +39,9 @@ const ipc: PersistImpl = (config, env) => {
             })
         }
         hasLoaded = true;
+        if (!messenger) {
+            throw new Error("No messenger")
+        }
         return config(
             (...args) => {
                 set(...args)
@@ -51,12 +57,17 @@ const ipc: PersistImpl = (config, env) => {
 class Messenger {
     public type: "node" | "chromium"
     private frame: Window | {onDidReceiveMessage: any; postMessage: any};
+    private clients: (Window | {onDidReceiveMessage: any; postMessage: any})[] = [];
     constructor(private _frame: Window | {onDidReceiveMessage: any; postMessage: any}) {
         if (!_frame) {
             throw new Error("No window")
         }
         this.type = "onDidReceiveMessage" in _frame ? "node" : "chromium"
         this.frame = _frame;
+        this.clients = [_frame]
+    }
+    addClient(client: Window | {onDidReceiveMessage: any; postMessage: any}) {
+        this.clients.push(client)
     }
     listen(fn: (message: any) => void) {
         if ('onDidReceiveMessage' in this.frame) {
@@ -76,11 +87,13 @@ class Messenger {
         }
     }
     post(message: any) {
-        if ('postMessage' in this.frame) {
-            this.frame.postMessage(message);
-        } else {
-            throw new Error("No postMessage")
-        }
+        this.clients.forEach(client => {
+            if ('postMessage' in client) {
+                client.postMessage(message);
+            } else {
+                throw new Error("No postMessage")
+            }
+        })
     }
 
 }

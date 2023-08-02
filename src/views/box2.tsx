@@ -1,16 +1,8 @@
 import React from "react"
-import { Store, getStore } from "../state"
+import { getStore } from "../state"
 import { useStore } from "zustand"
 
 const _store = getStore()
-
-export const commands = {
-  "myExtension.sayHello": (store: Store) => {
-    store
-      .getState()
-      .addTodo("Hello from the webview" + Math.random().toString())
-  },
-}
 
 export default function Box() {
   const store = useStore(_store)
