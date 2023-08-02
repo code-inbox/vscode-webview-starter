@@ -24,6 +24,7 @@ const ipc: PersistImpl = (config, env) => {
                     throw new Error("No webview api")
                 }
                 messenger = new Messenger(webviewApi)
+                messenger.requestData()
             } else {
                 messenger = new Messenger(env);
             }
@@ -33,9 +34,13 @@ const ipc: PersistImpl = (config, env) => {
         }
         if (!hasLoaded) {
             messenger.listen((state) => {
-                console.log(`  received by ${messenger.type}`, state);
-                set(state)
-                console.log(`  new state on ${messenger.type}`, get());
+                if (state.type === "request") {
+                    messenger.post(get())
+                } else {
+                    console.log(`  received by ${messenger.type}`, state);
+                    set(state)
+                    console.log(`  new state on ${messenger.type}`, get());
+                }
             })
         }
         hasLoaded = true;
@@ -94,6 +99,11 @@ class Messenger {
                 throw new Error("No postMessage")
             }
         })
+    }
+    requestData() {
+        if (this.type === "chromium") {
+            this.post({type: "request"})
+        }
     }
 
 }
