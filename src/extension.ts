@@ -17,18 +17,6 @@ class ViewProvider implements vscode.WebviewViewProvider {
         this.viewId = id
         this.title = id
         this.entryPoint = `dist/chromium/${id}.js`
-        // look for any exports named "commands" in the entry point
-        try {
-            const commands = require(vscode.Uri.joinPath(
-                this.extensionContext.extensionUri,
-                `dist/chromium/${id}.cjs`
-            ).path)
-            if (commands.commands) {
-                this.commandHandler = commands.commands
-            }
-        } catch (e) {
-            console.error(e)
-        }
 
         if (extensionContext.extensionMode === vscode.ExtensionMode.Development) {
             fs.watchFile(this.getFsPath().path, () => {
@@ -61,6 +49,18 @@ class ViewProvider implements vscode.WebviewViewProvider {
         this.webview = webviewView.webview
         if (!this.store) {
             this.store = getStore(this.webview)
+            import(vscode.Uri.joinPath(
+                this.extensionContext.extensionUri,
+                `dist/chromium/${this.viewId}.static.js`
+            ).path).then(({commands}) => {
+                if (!commands) {
+                    return
+                }
+                Object.keys(commands).forEach(command => {
+                    this.commandHandler[command] = () => commands[command](this.store)
+                })
+            })
+
         }
 
         this.render()
@@ -123,7 +123,8 @@ class ViewProvider implements vscode.WebviewViewProvider {
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
     // list all paths in "src/views" directory
-    const viewsPaths = fs.readdirSync(path.resolve(__dirname, "../../src/views"))
+    // TODO: fix below
+    const viewsPaths = fs.readdirSync(path.resolve(__dirname, "../../src/views")).filter(path => !path.includes('list'))
     const viewsIds = viewsPaths.map((viewPath) => viewPath.split(".")[0])
     const providers = viewsIds.map((viewId) => {
         const viewProvider = new ViewProvider(viewId, context)

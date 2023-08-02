@@ -53,8 +53,7 @@ const isWatch = process.argv.includes("--watch")
         return build({
           build: {
             lib: {
-              formats: ["es", "cjs"],
-              fileName: (format, name) => format === "cjs" ? `${name}.cjs` : `${name}.js`,
+              formats: ["es"],
             },
             rollupOptions: {
               input: f.path,
