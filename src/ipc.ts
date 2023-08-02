@@ -9,6 +9,7 @@ type PersistImpl = <S>(
     env: vscode.Webview | undefined
 ) => StateCreator<S, [], []>
 
+// Aim is to have only 1 messenger:store per-process
 let hasLoaded = false;
 let messenger: Messenger;
 
@@ -34,12 +35,13 @@ const ipc: PersistImpl = (config, env) => {
         }
         if (!hasLoaded) {
             messenger.listen((state) => {
-                if (state.type === "request") {
-                    messenger.post(get())
-                } else {
+                if (state.type !== "request") {
                     console.log(`  received by ${messenger.type}`, state);
                     set(state)
                     console.log(`  new state on ${messenger.type}`, get());
+                }
+                if (messenger.type === "node") {
+                    messenger.post(get())
                 }
             })
         }
@@ -91,9 +93,11 @@ class Messenger {
             return () => window.removeEventListener('message', handler);
         }
     }
-    post(message: any) {
+    post(_message: any) {
         this.clients.forEach(client => {
             if ('postMessage' in client) {
+                // strip away any non-serializable data
+                const message = JSON.parse(JSON.stringify(_message))
                 client.postMessage(message);
             } else {
                 throw new Error("No postMessage")

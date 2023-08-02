@@ -22,7 +22,9 @@ export default function Box() {
         <h3>TODOS</h3>
         <ul>
           {store.todos.map((todo) => (
-            <li key={todo}>{todo}</li>
+            <><li key={todo}>{todo}</li>
+            <button onClick={() => store.removeTodo(todo)}>Close</button>
+            </>
           ))}
         </ul>
       </div>
