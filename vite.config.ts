@@ -5,7 +5,6 @@ require("dotenv").config()
 const baseConfig: UserConfig = {
     publicDir: false,
     build: {
-        emptyOutDir: false,
         lib: {
             entry: [],
             fileName: (_, name) => `${name}.js`,

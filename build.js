@@ -1,7 +1,7 @@
 const path = require("path")
 const fs = require("fs")
 const { build } = require("vite")
-const getFrameworkViews = require("./scripts/getFrameworkViews")
+const { getFrameworkViews } = require("./scripts/getFrameworkViews")
 const { builtinModules } = require("module")
 
 require("dotenv").config()
@@ -52,6 +52,7 @@ const isWatch = process.argv.includes("--watch")
       .map((f) => {
         return build({
           build: {
+            emptyOutDir: false,
             lib: {
               formats: ["es"],
             },

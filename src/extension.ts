@@ -49,6 +49,11 @@ class ViewProvider implements vscode.WebviewViewProvider {
         this.webview = webviewView.webview
         if (!this.store) {
             this.store = getStore(this.webview)
+            // TODO: I would quite like to be able to call getStore() in activate function
+            // so that calling it from here, merely serves to call messenger.addClient to a cached store
+            this.store.subscribe(state => {
+                vscode.window.showInformationMessage(`Todos length: ${state.todos.length}`)
+            })
             import(vscode.Uri.joinPath(
                 this.extensionContext.extensionUri,
                 `dist/chromium/${this.viewId}.static.js`
@@ -121,12 +126,10 @@ class ViewProvider implements vscode.WebviewViewProvider {
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
     // list all paths in "src/views" directory
-    // TODO: fix below
-    const viewsPaths = fs.readdirSync(path.resolve(__dirname, "../../src/views")).filter(path => !path.includes('list'))
-    const viewsIds = viewsPaths.map((viewPath) => viewPath.split(".")[0])
-    const providers = viewsIds.map((viewId) => {
+    const viewsIds = await import('../scripts/getFrameworkViews.js').then(({getFrameworkViews}) => getFrameworkViews()).then(res => res.map(view => view.name))
+    const providers = viewsIds.map((viewId: string) => {
         const viewProvider = new ViewProvider(viewId, context)
         viewProvider.register()
         return viewProvider
