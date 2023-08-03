@@ -77,7 +77,7 @@ const isWatch = process.argv.includes("--watch")
               formats: ["cjs"],
             },
             rollupOptions: {
-              input: path.join(__dirname, "src/extension.ts"),
+              input: path.join(__dirname, "extension.ts"),
               output: {
                 format: "cjs",
                 dir: path.join(__dirname, "dist/node"),

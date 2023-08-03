@@ -11,12 +11,11 @@ type PersistImpl = <S extends {}>(
 
 // Aim is to have only 1 messenger:store per-process
 let messenger: BaseMessenger<unknown>;
-let store: any;
 
 const ipc: PersistImpl = (config, newConnectionFromNode?: vscode.Webview) => {
     return (set, get, api) => {
         // if node, we don't instantiate messenger with any webviews (they get registered later)
-        // we just want to instantate (and cache) the store
+        // we just want to instantate (and cache) the store]
         if (typeof window === "undefined") {
             let nodeMessenger: NodeMessenger<ReturnType<typeof get>>
             if (!messenger) {
@@ -61,16 +60,10 @@ const ipc: PersistImpl = (config, newConnectionFromNode?: vscode.Webview) => {
             })
         }
 
-        if (store) {
-            // returning cached store 
-            console.log("returning cached store", store)
-            return store
-        }
-
-        return store = config(
+        return config(
             (...args) => {
                 set(...args)
-                console.log(`broadcasting from ${messenger.type}`, get())
+                console.log(...args, `broadcasting from ${messenger.type}`, get())
                 messenger.post(get())
             },
             get,
@@ -91,9 +84,13 @@ abstract class BaseMessenger<S> {
 class NodeMessenger<S> implements BaseMessenger<S> {
     public type = "node"
     public connections: ConnectionFromNode[] = []
+    private disposeListeners: () => void
     listen(fn: (message: S | {type: "request"}) => void) {
+        if (this.disposeListeners) {
+            this.disposeListeners()
+        }
         const disposables = this.connections.map(connection => connection.onDidReceiveMessage(fn))
-        return () => {
+        return this.disposeListeners = () => {
             disposables.forEach(disposable => disposable.dispose())
         };
     }
@@ -110,16 +107,21 @@ class NodeMessenger<S> implements BaseMessenger<S> {
 class ChromiumMessenger<S> implements BaseMessenger<S> {
     public type = "chromium"
     private connection: ConnectionFromChromium
+    private listening = false
     constructor(connection: ConnectionFromChromium) {
         this.connection = connection
     }
     listen(fn: (message: S) => void) {
+        if (this.listening) {
+            return
+        }
         const handler = (event: MessageEvent) => {
             if (event.origin !== location.origin) {return;}
             fn(event.data);
         };
         window.addEventListener('message', handler);
-        return () => window.removeEventListener('message', handler);
+        this.listening = true
+        return () => {window.removeEventListener('message', handler); this.listening = false};
     }
     post(message: S | {type: "request"}) {
         this.connection.postMessage(JSON.parse(JSON.stringify(message)))

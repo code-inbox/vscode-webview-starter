@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
 import fs from "fs"
 import path from "path"
-import {Store, getStore} from "./state"
+import {Store, getStore} from "./src/state"
 
 class ViewProvider implements vscode.WebviewViewProvider {
     public readonly viewId: string
@@ -49,11 +49,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
         this.webview = webviewView.webview
         if (!this.store) {
             this.store = getStore(this.webview)
-            // TODO: I would quite like to be able to call getStore() in activate function
-            // so that calling it from here, merely serves to call messenger.addClient to a cached store
-            this.store.subscribe(state => {
-                vscode.window.showInformationMessage(`Todos length: ${state.todos.length}`)
-            })
+
             import(vscode.Uri.joinPath(
                 this.extensionContext.extensionUri,
                 `dist/chromium/${this.viewId}.static.js`
@@ -128,7 +124,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
     // list all paths in "src/views" directory
-    const viewsIds = await import('../scripts/getFrameworkViews.js').then(({getFrameworkViews}) => getFrameworkViews()).then(res => res.map(view => view.name))
+    const viewsIds = await import('./scripts/getFrameworkViews.js').then(({getFrameworkViews}) => getFrameworkViews()).then(res => res.map(view => view.name))
     const providers = viewsIds.map((viewId: string) => {
         const viewProvider = new ViewProvider(viewId, context)
         viewProvider.register()
@@ -167,5 +163,11 @@ export async function activate(context: vscode.ExtensionContext) {
                 })
             }))
         })
+    })
+
+    // here is a good place to setup state-listeners that have effects in the main node process
+    const store = getStore()
+    store.subscribe(state => {
+        vscode.window.showInformationMessage(`Todos length: ${state.todos.length}`)
     })
 }

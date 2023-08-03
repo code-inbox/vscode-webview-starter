@@ -1,6 +1,6 @@
 import {StoreApi, UseBoundStore, create} from "zustand"
 import * as vscode from "vscode"
-import ipc from "./ipc"
+import ipc from "../ipc"
 
 export type State = {
     todos: string[]
