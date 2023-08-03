@@ -10,10 +10,10 @@ export type State = {
 
 export type Store = UseBoundStore<StoreApi<State>>
 
-export const getStore = (env?: vscode.Webview) => create<State>(
+export const getStore = (connection?: vscode.Webview) => create<State>(
     ipc((set) => ({
         todos: [],
         addTodo: (todo) => set((state) => ({todos: [...state.todos, todo]})),
         removeTodo: (todo) => set((state) => ({todos: state.todos.filter((t) => t !== todo)})),
-    }), env)
+    }), connection)
 )

@@ -2,15 +2,6 @@ import React from "react"
 import { useStore } from "zustand"
 import { Store, getStore } from "../state"
 
-// TODO: would be nice if dynamic-contributes could update package.json based on this info
-export const commands = {
-  "myExtension.sayHello": (store: Store) => {
-    store
-      .getState()
-      .addTodo("Hello from the webview" + Math.random().toString())
-  },
-}
-
 const _store = getStore()
 
 export default function Box() {

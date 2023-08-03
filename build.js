@@ -8,6 +8,7 @@ require("dotenv").config()
 const isWatch = process.argv.includes("--watch")
 
 // NOTE: this config gets merged with that defined in vite.config.js
+// TODO: this should wait until the node/extension file is present also
 ;(async () => {
   const filesWritten = new Promise((resolve) => {
     if (fs.existsSync(path.join(__dirname, "dist"))) {
