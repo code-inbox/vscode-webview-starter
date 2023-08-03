@@ -134,8 +134,9 @@ class ChromiumMessenger<S> implements BaseMessenger<S> {
 }
 
 export default function getStore<S extends {}>(initializer: StateCreator<S>) {
-    return (connection?: vscode.Webview) => {
+    return function (connection?: vscode.Webview): UseBoundStore<StoreApi<S>> {
         if (store) {
+            // run the middleware again to update messenger without creating a new store
             ipc(() => ({}), connection)(store.setState, store.getState, store)
             return store
         }
