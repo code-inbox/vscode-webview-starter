@@ -1,7 +1,7 @@
 const path = require("path")
 const fs = require("fs")
 const { build } = require("vite")
-const { getFrameworkViews } = require("./scripts/getFrameworkViews")
+const { getFrameworkViews } = require("./getFrameworkViews")
 const { builtinModules } = require("module")
 
 require("dotenv").config()

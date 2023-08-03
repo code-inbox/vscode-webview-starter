@@ -12,7 +12,7 @@
     "build": "npm run setup && node build.js",
     "start": "npm run setup && node build.js --watch",
     "open": "code --extensionDevelopmentPath=${PWD}",
-    "setup": "node dynamic-contributes.js"
+    "setup": "node dynamicContributes.js"
   },
   "keywords": [],
   "author": "",

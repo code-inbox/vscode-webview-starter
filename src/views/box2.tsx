@@ -2,7 +2,7 @@ import React from "react"
 import { getStore, Store } from "../state"
 import { useStore } from "zustand"
 
-// TODO: would be nice if dynamic-contributes could update package.json based on this info
+// TODO: would be nice if dynamicContributes could update package.json based on this info
 export const commands = {
   "myExtension.sayHello": (store: Store) => {
     store

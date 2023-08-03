@@ -1,6 +1,6 @@
 const fs = require("fs")
 const path = require("path")
-const {getFrameworkViews} = require("./scripts/getFrameworkViews")
+const {getFrameworkViews} = require("./getFrameworkViews")
 
 const saveFile = fs.writeFileSync
 
