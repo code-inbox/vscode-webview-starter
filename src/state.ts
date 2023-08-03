@@ -1,6 +1,5 @@
-import {StoreApi, UseBoundStore, create} from "zustand"
-import * as vscode from "vscode"
-import ipc from "../ipc"
+import {StoreApi, UseBoundStore} from "zustand"
+import _getStore from "../ipc"
 
 export type State = {
     todos: string[]
@@ -10,10 +9,8 @@ export type State = {
 
 export type Store = UseBoundStore<StoreApi<State>>
 
-export const getStore = (connection?: vscode.Webview) => create<State>(
-    ipc((set) => ({
-        todos: [],
-        addTodo: (todo) => set((state) => ({todos: [...state.todos, todo]})),
-        removeTodo: (todo) => set((state) => ({todos: state.todos.filter((t) => t !== todo)})),
-    }), connection)
-)
+export const getStore = _getStore<State>((set) => ({
+    todos: [],
+    addTodo: (todo) => set((state) => ({todos: [...state.todos, todo]})),
+    removeTodo: (todo) => set((state) => ({todos: state.todos.filter((t) => t !== todo)})),
+}))

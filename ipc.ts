@@ -1,4 +1,4 @@
-import {StateCreator} from "zustand"
+import {StateCreator, StoreApi, UseBoundStore, create} from "zustand"
 import * as vscode from "vscode"
 import {WebviewApi} from "vscode-webview"
 
@@ -9,10 +9,12 @@ type PersistImpl = <S extends {}>(
     newConnectionFromNode?: vscode.Webview
 ) => StateCreator<S, [], []>
 
+
 // Aim is to have only 1 messenger:store per-process
 let messenger: BaseMessenger<unknown>;
+let store: UseBoundStore<StoreApi<any>>;
 
-const ipc: PersistImpl = (config, newConnectionFromNode?: vscode.Webview) => {
+export const ipc: PersistImpl = (storeInitializer, newConnectionFromNode?: vscode.Webview) => {
     return (set, get, api) => {
         // if node, we don't instantiate messenger with any webviews (they get registered later)
         // we just want to instantate (and cache) the store]
@@ -60,7 +62,7 @@ const ipc: PersistImpl = (config, newConnectionFromNode?: vscode.Webview) => {
             })
         }
 
-        return config(
+        return storeInitializer(
             (...args) => {
                 set(...args)
                 console.log(...args, `broadcasting from ${messenger.type}`, get())
@@ -131,4 +133,14 @@ class ChromiumMessenger<S> implements BaseMessenger<S> {
     }
 }
 
-export default ipc;
+export default function getStore<S extends {}>(initializer: StateCreator<S>) {
+    return (connection?: vscode.Webview) => {
+        if (store) {
+            ipc(() => ({}), connection)(store.setState, store.getState, store)
+            return store
+        }
+        return store = create<S>(
+            ipc<S>(initializer)
+        )
+    }
+}

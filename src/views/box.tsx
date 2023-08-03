@@ -1,6 +1,6 @@
 import React from "react"
 import { useStore } from "zustand"
-import { Store, getStore } from "../state"
+import { getStore } from "../state"
 
 const _store = getStore()
 
