@@ -4,6 +4,8 @@ This is a starter template for creating a VSCode extension with one or more webv
 
 ## Getting started
 
+The build scripts assume you are running Node 16 or later.
+
 1. Clone this repository
 2. Run `npm install`
 3. Run `npm start`. This will compile the extension and open a new VSCode window with the extension loaded.
