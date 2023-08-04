@@ -4,7 +4,7 @@ import {WebviewApi} from "vscode-webview"
 
 // TODO: sending partial state updates???
 
-type PersistImpl = <S extends {}>(
+type IpcImpl = <S extends {}>(
     storeInitializer: StateCreator<S, [], []>,
     newConnectionFromNode?: vscode.Webview
 ) => StateCreator<S, [], []>
@@ -14,7 +14,7 @@ type PersistImpl = <S extends {}>(
 let messenger: BaseMessenger<unknown>;
 let store: UseBoundStore<StoreApi<any>>;
 
-export const ipc: PersistImpl = (storeInitializer, newConnectionFromNode?: vscode.Webview) => {
+const ipc: IpcImpl = (storeInitializer, newConnectionFromNode?: vscode.Webview) => {
     return (set, get, api) => {
         // if node, we don't instantiate messenger with any webviews (they get registered later)
         // we just want to instantate (and cache) the store]
@@ -134,6 +134,10 @@ class ChromiumMessenger<S> implements BaseMessenger<S> {
 }
 
 export default function getStore<S extends {}>(initializer: StateCreator<S>) {
+    /**
+     * Returns a Zustand store for the current process, creating it if necessary
+     * @param connection If running in Node, you can have a 1:many connection to webviews that will be synced with. This registers a new connection.
+     */
     return function (connection?: vscode.Webview): UseBoundStore<StoreApi<S>> {
         if (store) {
             // run the middleware again to update messenger without creating a new store

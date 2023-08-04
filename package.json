@@ -68,19 +68,14 @@
     },
     "commands": [
       {
-        "command": "myExtension.sayHello",
-        "title": "Say Hello"
+        "command": "vscode_starter.addTodo",
+        "title": "Add Todo"
       }
     ],
     "configuration": {
       "type": "object",
-      "title": "MagicBell Ping",
-      "properties": {
-        "ping.githubAccessToken": {
-          "type": "string",
-          "description": "Your github access token. Refer to Ping's VSCode Extension page for a step-by-step guide on how to create your token."
-        }
-      }
+      "title": "vscode_starter",
+      "properties": {}
     },
     "keybindings": []
   }
