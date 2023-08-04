@@ -1,3 +1,6 @@
+
+<img width="899" alt="codeinbox readme dark" src="https://github.com/code-inbox/vscode-webview-starter/assets/11192814/12cee044-6b38-449d-a575-15d719739409">
+
 # VSCode Webview Starter Template
 
 This is a starter template for creating a VSCode extension with one or more webviews to be rendered in a sidebar (In VSCode parlance, it creates a dedicated `viewContainer` in the `Activity Bar` with one or more `views`).
