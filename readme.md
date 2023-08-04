@@ -5,6 +5,12 @@
 
 This is a starter template for creating a VSCode extension with one or more webviews to be rendered in a sidebar (In VSCode parlance, it creates a dedicated `viewContainer` in the `Activity Bar` with one or more `views`).
 
+
+
+https://github.com/code-inbox/vscode-webview-starter/assets/11192814/c44df936-f87b-44a3-a1a9-9c53bf6d2ce4
+
+
+
 ## Getting started
 
 The build scripts assume you are running Node 16 or later.
