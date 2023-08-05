@@ -27,6 +27,7 @@
     "astring": "^1.8.6",
     "dotenv": "^16.3.1",
     "glob": "^10.3.3",
+    "typescript-plugin-css-modules": "^5.0.1",
     "vite": "^4.4.7"
   },
   "dependencies": {

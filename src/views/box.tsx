@@ -2,6 +2,8 @@ import React from "react"
 import { useStore } from "zustand"
 import { getStore } from "../state"
 
+import styles from "./box.module.css"
+
 const _store = getStore()
 
 export default function Box() {
@@ -9,7 +11,7 @@ export default function Box() {
 
   return (
     <div>
-      <h1>Box</h1>
+      <h1 className={styles.heading}>Box</h1>
       <div>
         <h3>TODOS</h3>
         <ul>

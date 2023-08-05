@@ -20,7 +20,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
         this.entryPoint = `dist/chromium/${id}.js`
 
         if (extensionContext.extensionMode === vscode.ExtensionMode.Development) {
-            fs.watchFile(this.getFsPath().path, () => {
+            fs.watchFile(this.getFsPath(this.entryPoint).path, () => {
                 this.render()
             })
         }
@@ -74,6 +74,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
         }
         const nonce = this.getNonce()
         const path = this.getWebviewUri()
+        const stylesPath = this.getStylesUri()
 
         this.webview.html = `<!DOCTYPE html>
     <html lang="en">
@@ -81,6 +82,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
         <meta name="theme-color" content="#000000">
+        <link rel="stylesheet" href=${stylesPath}>
         <title>${this.title}</title>
   
         <meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https://api.rollbar.com/; img-src vscode-resource: vscode-webview: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">
@@ -100,15 +102,19 @@ class ViewProvider implements vscode.WebviewViewProvider {
 
     public dispose() { }
 
-    private getFsPath() {
+    private getFsPath(entry: string) {
         return vscode.Uri.joinPath(
             this.extensionContext.extensionUri,
-            this.entryPoint
+            entry
         )
     }
 
+    private getStylesUri() {
+        return this.webview?.asWebviewUri(this.getFsPath("dist/chromium/style.css")).toString()
+    }
+
     private getWebviewUri() {
-        return this.webview?.asWebviewUri(this.getFsPath()).toString()
+        return this.webview?.asWebviewUri(this.getFsPath(this.entryPoint)).toString()
     }
     private getNonce() {
         let text = ""
