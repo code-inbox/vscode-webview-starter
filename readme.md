@@ -3,7 +3,7 @@
 
 # VSCode Webview Starter Template
 
-This is a starter template for creating a VSCode extension with one or more webviews to be rendered in a sidebar (In VSCode parlance, it creates a dedicated `viewContainer` in the `Activity Bar` with one or more `views`).
+This is a starter template for creating a VSCode extension with one or more webviews to be rendered in a sidebar (In VSCode parlance, it creates a dedicated `viewContainer` in the `Activity Bar` with one or more `views`). For a smooth developer-experience, the extension host and its webviews are live-reloaded on each code change.
 
 
 
@@ -44,6 +44,10 @@ State management for webview extensions can be tricky, because there can be mult
 - The webview process for the second webview (Chromium)
 
 This template uses [Zustand](https://github.com/pmndrs/zustand) for state management. You can define your state along with its update functions in `src/state.ts`, and a custom middleware will ensure that the state is kept in sync across all processes.
+
+## Styling
+
+This template includes built-in support for [CSS Modules](https://github.com/css-modules/css-modules).
 
 ## Commands
 
