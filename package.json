@@ -19,6 +19,7 @@
   "license": "ISC",
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.3",
+    "@types/lodash.pick": "^4.4.7",
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.18",
     "@types/vscode": "^1.80.0",
@@ -31,6 +32,7 @@
     "vite": "^4.4.7"
   },
   "dependencies": {
+    "lodash.pick": "^4.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "serve": "^14.2.0",

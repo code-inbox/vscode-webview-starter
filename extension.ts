@@ -1,8 +1,10 @@
 import * as vscode from "vscode"
 import fs from "fs"
 import path from "path"
-import {Store, getStore} from "./src/state"
+import {Store, getNodeStore} from "./src/state"
 import setupStoreSubscriptions from "./src/node/setupStoreSubscriptions"
+
+const [, connectWebviewToStore] = getNodeStore()
 
 class ViewProvider implements vscode.WebviewViewProvider {
     public readonly viewId: string
@@ -49,7 +51,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
         }
         this.webview = webviewView.webview
         if (!this.store) {
-            this.store = getStore(this.webview)
+            this.store = connectWebviewToStore(this.webview)
 
             import(vscode.Uri.joinPath(
                 this.extensionContext.extensionUri,

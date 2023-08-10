@@ -1,5 +1,5 @@
 import React from "react"
-import { getStore, Store } from "../state"
+import { getChromiumStore, Store } from "../state"
 import { useStore } from "zustand"
 
 import styles from "./box.module.css"
@@ -13,7 +13,7 @@ export const commands = {
   },
 }
 
-const _store = getStore()
+const _store = getChromiumStore()
 
 export default function Box() {
   const store = useStore(_store)

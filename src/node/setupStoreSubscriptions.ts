@@ -1,11 +1,14 @@
-import {getStore} from "../state"
+import {getNodeStore} from "../state"
 import * as vscode from "vscode"
+
+const [store] = getNodeStore()
 
 // See https://vscode-docs.readthedocs.io/en/stable/customization/keybindings/
 
 export default function () {
-    const store = getStore()
-    store.subscribe(state => {
-        vscode.window.showInformationMessage(`Todos length: ${state.todos.length}`)
+    store.subscribe((state, prevState) => {
+        if (state.todos.length !== prevState.todos.length) {
+            vscode.window.showInformationMessage(`Todos length: ${state.todos.length}`)
+        }
     })
 }

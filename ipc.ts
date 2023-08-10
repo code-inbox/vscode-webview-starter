@@ -1,5 +1,6 @@
 import {StateCreator, StoreApi, UseBoundStore, create} from "zustand"
 import * as vscode from "vscode"
+import pick from "lodash.pick"
 import {WebviewApi} from "vscode-webview"
 
 // TODO: sending partial state updates???
@@ -16,9 +17,9 @@ let store: UseBoundStore<StoreApi<any>>;
 
 const ipc: IpcImpl = (storeInitializer, newConnectionFromNode?: vscode.Webview) => {
     return (set, get, api) => {
-        // if node, we don't instantiate messenger with any webviews (they get registered later)
-        // we just want to instantate (and cache) the store]
+        // instantiate Node messenger if running in node, Chromium messenger if running in chromium
         if (typeof window === "undefined") {
+            // running in Node environment
             let nodeMessenger: NodeMessenger<ReturnType<typeof get>>
             if (!messenger) {
                 console.log('new messenger node')
@@ -27,17 +28,19 @@ const ipc: IpcImpl = (storeInitializer, newConnectionFromNode?: vscode.Webview) 
                 console.log('re-use messenger node')
                 nodeMessenger = messenger as NodeMessenger<ReturnType<typeof get>>
             }
+            // there can be a 1:many messaging relationship between node processes and webviews / chromium processes
             if (newConnectionFromNode) {
                 nodeMessenger.addConnection(newConnectionFromNode)
             }
             console.log('node messenger state', nodeMessenger.connections.length)
             nodeMessenger.listen(state => {
                 if (!("type" in state)) {
-                    // respond to chromium request for latest data
+                    // unless it's a specific request for data, treat incoming messages as updates to the node state
                     console.log(`received by node process`, state);
-                    set(state)
+                    set(pick(state, Object.keys(get())))
                     console.log(`new state on node process`, get());
                 }
+                // on all updates to the node state, broadcast to all webviews
                 nodeMessenger.post(get())
             })
         } else {
@@ -78,7 +81,7 @@ type ConnectionFromChromium = WebviewApi<unknown>
 type ConnectionFromNode = vscode.Webview
 
 abstract class BaseMessenger<S> {
-    public type: string
+    public abstract type: string
     public listen(fn: (message: any) => void) { }
     public post(message: any) { }
 }
@@ -86,7 +89,7 @@ abstract class BaseMessenger<S> {
 class NodeMessenger<S> implements BaseMessenger<S> {
     public type = "node"
     public connections: ConnectionFromNode[] = []
-    private disposeListeners: () => void
+    private disposeListeners?: () => void
     listen(fn: (message: S | {type: "request"}) => void) {
         if (this.disposeListeners) {
             this.disposeListeners()

@@ -1,10 +1,10 @@
 import React from "react"
 import { useStore } from "zustand"
-import { getStore } from "../state"
+import { getChromiumStore } from "../state"
 
 import styles from "./box.module.css"
 
-const _store = getStore()
+const _store = getChromiumStore()
 
 export default function Box() {
   const store = useStore(_store)
@@ -16,8 +16,9 @@ export default function Box() {
         <h3>TODOS</h3>
         <ul>
           {store.todos.map((todo) => (
-            <><li key={todo}>{todo}</li>
-            <button onClick={() => store.removeTodo(todo)}>Close</button>
+            <>
+              <li key={todo}>{todo}</li>
+              <button onClick={() => store.removeTodo(todo)}>Close</button>
             </>
           ))}
         </ul>
