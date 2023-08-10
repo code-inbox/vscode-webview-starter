@@ -6,38 +6,48 @@
   "engines": {
     "vscode": "^1.74.0"
   },
-  "module": "dist",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run setup && node build.js",
-    "start": "npm run setup && node build.js --watch",
+    "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "start": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript --watch",
+    "prebuild": "ts-node contributes.ts",
+    "prestart": "ts-node contributes.ts",
     "open": "code --extensionDevelopmentPath=${PWD}",
-    "setup": "node dynamicContributes.js"
+    "publish": "vsce publish"
   },
+  "publisher": "vscode_starter",
+  "icon": "public/ping-logo.png",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.3",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-typescript": "^11.1.2",
     "@sveltejs/vite-plugin-svelte": "^2.4.3",
     "@types/lodash.pick": "^4.4.7",
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.18",
-    "@types/vscode": "^1.80.0",
+    "@types/vscode": "^1.74.0",
     "@types/vscode-webview": "^1.57.1",
     "@vitejs/plugin-react": "^4.0.3",
     "astring": "^1.8.6",
     "dotenv": "^16.3.1",
     "glob": "^10.3.3",
-    "typescript-plugin-css-modules": "^5.0.1",
-    "vite": "^4.4.7"
+    "rollup-plugin-esbuild": "^5.0.0",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-svelte": "^7.1.6",
+    "svelte": "^4.1.2",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.6.1"
   },
   "dependencies": {
     "lodash.pick": "^4.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "serve": "^14.2.0",
-    "svelte": "^4.1.1",
-    "watch": "^1.0.2",
     "zustand": "^4.4.0"
   },
   "activationEvents": [

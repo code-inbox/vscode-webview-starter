@@ -133,7 +133,14 @@ class ViewProvider implements vscode.WebviewViewProvider {
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
     // list all paths in "src/views" directory
-    const viewsIds = await import('./getFrameworkViews.js').then(({getFrameworkViews}) => getFrameworkViews()).then(res => res.map(view => view.name))
+    const extensionPath = context.extensionPath;
+    const packageJsonPath = path.join(extensionPath, 'package.json');
+
+    // get contributes views
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+    const contributes = packageJson.contributes;
+    const viewsIds = contributes.views['container'].map(view => view.name)
+
     const providers = viewsIds.map((viewId: string) => {
         const viewProvider = new ViewProvider(viewId, context)
         viewProvider.register()
