@@ -13,7 +13,8 @@
     "prebuild": "ts-node contributes.ts",
     "prestart": "ts-node contributes.ts",
     "open": "code --extensionDevelopmentPath=${PWD}",
-    "publish": "vsce publish"
+    "package": "vsce package --no-dependencies",
+    "publish": "vsce publish --no-dependencies"
   },
   "publisher": "vscode_starter",
   "icon": "public/ping-logo.png",
