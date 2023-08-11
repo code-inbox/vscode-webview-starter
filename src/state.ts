@@ -1,5 +1,5 @@
-import {StateCreator, StoreApi, UseBoundStore} from "zustand"
-import _getStore from "../ipc"
+import {StoreApi, UseBoundStore} from "zustand"
+import _getStore, {useVscode} from "../ipc"
 import * as vscode from "vscode"
 
 export type State = {
@@ -18,13 +18,13 @@ const getStore = _getStore<State>((set) => ({
 
 /**
  * Gets a Zustand store for the current Chromium process
- * @returns A Zustand store
+ * @returns A Zustand store, and a function to send a command to the Node process
  */
 export const getChromiumStore = () => {
     if (typeof window === "undefined") {
         throw new Error("Cannot get chromium store from node process")
     }
-    return getStore()
+    return [getStore(), useVscode()] as const
 }
 
 /**

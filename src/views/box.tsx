@@ -4,7 +4,7 @@ import { getChromiumStore } from "../state"
 
 import styles from "./box.module.css"
 
-const _store = getChromiumStore()
+const [_store, vscode] = getChromiumStore()
 
 export default function Box() {
   const store = useStore(_store)
@@ -22,6 +22,13 @@ export default function Box() {
             </>
           ))}
         </ul>
+        <button
+          onClick={() => {
+            vscode("window.showInformationMessage", ["It works!"])
+          }}
+        >
+          Show information message
+        </button>
       </div>
     </div>
   )

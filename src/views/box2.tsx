@@ -13,7 +13,7 @@ export const commands = {
   },
 }
 
-const _store = getChromiumStore()
+const [_store] = getChromiumStore()
 
 export default function Box() {
   const store = useStore(_store)
