@@ -19,7 +19,7 @@
   "icon": "public/ping-logo.png",
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.18",

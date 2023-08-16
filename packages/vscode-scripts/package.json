@@ -32,8 +32,8 @@
     "react",
     "typescript"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "Matt Oxley <matt@magicbell.io>",
+  "license": "MIT",
   "dependencies": {
     "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-commonjs": "^25.0.3",
