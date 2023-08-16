@@ -1,11 +1,6 @@
 import {generate} from "astring"
-import type {AcornNode, Plugin} from "rollup"
 
-interface PluginImpl extends Plugin {
-    order?: "pre" | "post"
-}
-
-export function reactMountPlugin(): PluginImpl {
+export function reactMountPlugin() {
     return {
         name: "react-mount-plugin",
         order: "pre",
@@ -24,7 +19,7 @@ root.render(<Component />);`
     }
 }
 
-export function postBuildPlugin(options: {onComplete: (files: string[]) => void}): PluginImpl {
+export function postBuildPlugin(options){
     return {
         name: "post-build-plugin",
         writeBundle(_, bundle) {
@@ -42,17 +37,17 @@ export function postBuildPlugin(options: {onComplete: (files: string[]) => void}
     }
 }
 
-export function getStaticInfoPlugin(): PluginImpl {
+export function getStaticInfoPlugin(){
     return {
         name: "get-static-info",
         moduleParsed({id, ast}) {
             if (id.endsWith(".tsx") && ast) {
                 const componentName = id.slice(id.lastIndexOf("/") + 1, -4)
-                const exportNodes: AcornNode[] = (ast as any)?.body.filter(
-                    (n: AcornNode) => n.type === "ExportNamedDeclaration"
+                const exportNodes = (ast)?.body.filter(
+                    (n) => n.type === "ExportNamedDeclaration"
                 )
                 const source = exportNodes
-                    .map((n: any) => {
+                    .map((n) => {
                         const name = n.declaration.declarations[0].id.name
                         const definition = generate(n.declaration.declarations[0].init)
                         const cjsExport = `module.exports.${name} = ${definition};`
@@ -69,7 +64,7 @@ export function getStaticInfoPlugin(): PluginImpl {
     }
 }
 
-export function svelteMountPlugin(): PluginImpl {
+export function svelteMountPlugin() {
     return {
         name: "svelte-mount-plugin",
         order: "pre",

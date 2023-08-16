@@ -1,10 +1,8 @@
 import * as vscode from "vscode"
 import fs from "fs"
 import path from "path"
-import {Store, getNodeStore} from "./src/state"
-import setupStoreSubscriptions from "./src/node/setupStoreSubscriptions"
-
-const [, connectWebviewToStore] = getNodeStore()
+import {getNodeStore} from "./state"
+import type {StoreApi} from "zustand/vanilla"
 
 class ViewProvider implements vscode.WebviewViewProvider {
     public readonly viewId: string
@@ -13,7 +11,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
     public commandHandler: Record<string, any> = {}
     private extensionContext: vscode.ExtensionContext
     private webview: vscode.Webview | undefined
-    private store: Store | undefined
+    private store: StoreApi<unknown> | undefined
 
     constructor(id: string, extensionContext: vscode.ExtensionContext) {
         this.extensionContext = extensionContext
@@ -45,26 +43,14 @@ class ViewProvider implements vscode.WebviewViewProvider {
         webviewView: vscode.WebviewView,
         context_: vscode.WebviewViewResolveContext<unknown>,
         token: vscode.CancellationToken
-    ): void | Thenable<void> {
+    ) {
         webviewView.webview.options = {
             enableScripts: true,
         }
         this.webview = webviewView.webview
         if (!this.store) {
+            const [, connectWebviewToStore] = getNodeStore()
             this.store = connectWebviewToStore(this.webview)
-
-            import(vscode.Uri.joinPath(
-                this.extensionContext.extensionUri,
-                `dist/chromium/${this.viewId}.static.js`
-            ).path).then(({commands}) => {
-                if (!commands) {
-                    return
-                }
-                Object.keys(commands).forEach(command => {
-                    this.commandHandler[command] = () => commands[command](this.store)
-                })
-            })
-
         }
 
         this.render()
@@ -125,7 +111,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export async function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
     // list all paths in "src/views" directory
     const extensionPath = context.extensionPath;
     const packageJsonPath = path.join(extensionPath, 'package.json');
@@ -147,34 +133,9 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     }
 
-    // here we want to go through all possible registered commands and register them
-    Promise.all(providers.map(provider => {
-        return import(vscode.Uri.joinPath(
-            context.extensionUri,
-            `dist/chromium/${provider.viewId}.static.js`
-        ).path).then(({commands}) => {
-            if (!commands) {
-                return
-            }
-            return Object.keys(commands)
-        })
-    })).then(commands => {
-        return [...new Set(commands.flat())]
-    }).then(commands => {
-        commands.forEach(command => {
-            if (!command) {
-                return
-            }
-            context.subscriptions.push(vscode.commands.registerCommand(command, () => {
-                providers.forEach(provider => {
-                    if (provider.commandHandler[command]) {
-                        provider.commandHandler[command]()
-                    }
-                })
-            }))
-        })
-    })
-
     // here is a good place to setup state-listeners that have effects in the main node process
-    setupStoreSubscriptions()
+    import("_app/node/activate.ts").then(({default: activate}) => {
+        activate()
+    })
 }
+
