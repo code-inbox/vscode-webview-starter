@@ -1,8 +1,20 @@
 {
   "name": "vscode-scripts",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Configuration and scripts for VS Code extension development",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code-inbox/vscode-webview-starter.git",
+    "directory": "packages/vscode-scripts"
+  },
+  "files": [
+    "bin",
+    "frameworks",
+    "scripts",
+    "*.js",
+    "*.json",
+    "*.ts"
+  ],
   "bin": {
     "vscode-scripts": "bin/vscode-scripts.js"
   },
@@ -14,32 +26,27 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-commonjs": "^25.0.3",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-typescript": "^11.1.2",
-    "@sveltejs/vite-plugin-svelte": "^2.4.3",
     "@types/lodash.pick": "^4.4.7",
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.18",
     "@types/vscode": "^1.74.0",
     "@types/vscode-webview": "^1.57.1",
-    "@vitejs/plugin-react": "^4.0.3",
     "astring": "^1.8.6",
     "dotenv": "^16.3.1",
     "glob": "^10.3.3",
+    "lodash.pick": "^4.4.0",
+    "react-dev-utils": "^12.0.1",
+    "rollup": "^3.28.0",
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-svelte": "^7.1.6",
-    "svelte": "^4.1.2",
     "ts-node": "^10.9.1",
     "tslib": "^2.6.1"
-  },
-  "devDependencies": {
-    "@rollup/plugin-alias": "^5.0.0",
-    "@rollup/plugin-dynamic-import-vars": "^2.0.5",
-    "react-dev-utils": "^12.0.1",
-    "rollup": "^3.28.0"
   }
 }
