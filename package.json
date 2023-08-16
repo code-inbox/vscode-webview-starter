@@ -12,7 +12,8 @@
     "start": "packages/vscode-scripts/bin/vscode-scripts.js start",
     "open": "code --extensionDevelopmentPath=${PWD}",
     "package": "vsce package --no-dependencies",
-    "publish": "vsce publish --no-dependencies"
+    "publish": "vsce publish --no-dependencies",
+    "publish-scripts": "cd packages/vscode-scripts && npm run bump-patch && npm publish"
   },
   "publisher": "vscode_starter",
   "icon": "public/ping-logo.png",
