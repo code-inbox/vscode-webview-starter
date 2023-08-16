@@ -1,4 +1,3 @@
-import * as vscode from "vscode"
 import {WebviewApi} from "vscode-webview"
 import {BaseMessenger} from "./ipc"
 

@@ -1,15 +1,10 @@
-
 <img width="899" alt="codeinbox readme dark" src="https://github.com/code-inbox/vscode-webview-starter/assets/11192814/12cee044-6b38-449d-a575-15d719739409">
 
 # VSCode Webview Starter Template
 
 This is a starter template for creating a VSCode extension with one or more webviews to be rendered in a sidebar (In VSCode parlance, it creates a dedicated `viewContainer` in the `Activity Bar` with one or more `views`). For a smooth developer-experience, the extension host and its webviews are live-reloaded on each code change.
 
-
-
 https://github.com/code-inbox/vscode-webview-starter/assets/11192814/c44df936-f87b-44a3-a1a9-9c53bf6d2ce4
-
-
 
 ## Getting started
 
@@ -51,20 +46,6 @@ This template includes built-in support for [CSS Modules](https://github.com/css
 
 ## Commands
 
-### Defining commands
-
-An easy way to create custom commands is by simply exporting a `commands` object from your webview file. For example:
-
-```ts
-// src/views/my-view.tsx
-
-export const commands = {
-  "my-extension.my-command": (store) => {
-    // Do something
-  },
-}
-```
-
 ### Calling commands
 
-Your users can call commands directly from the command palette, or you can call them programmatically from your main `node` process. A good place to call commands programmatically in response to state changes is in `src/node/setupStoreSubscriptions.ts`. See the default code for an example.
+Your users can call commands directly from the command palette, or you can call them programmatically from your main `node` process. A good place to call commands programmatically in response to state changes is in `src/node/activate.ts`. See the default code for an example.

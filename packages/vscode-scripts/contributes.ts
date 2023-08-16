@@ -19,7 +19,7 @@ function getFrameworkViews() {
     const mapToExtension = {
         react: "?sx",
         svelte: "svelte",
-    }
+    } as any
     if (!mapToExtension[framework]) {
         throw new Error(`Unsupported framework: ${framework}`)
     }

@@ -8,10 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
-    "start": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript --watch",
-    "prebuild": "ts-node contributes.ts",
-    "prestart": "ts-node contributes.ts",
+    "build": "packages/vscode-scripts/bin/vscode-scripts.js build",
+    "start": "packages/vscode-scripts/bin/vscode-scripts.js start",
     "open": "code --extensionDevelopmentPath=${PWD}",
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies"
@@ -42,7 +40,8 @@
     "rollup-plugin-svelte": "^7.1.6",
     "svelte": "^4.1.2",
     "ts-node": "^10.9.1",
-    "tslib": "^2.6.1"
+    "tslib": "^2.6.1",
+    "typescript-plugin-css-modules": "^5.0.1"
   },
   "dependencies": {
     "lodash.pick": "^4.4.0",
