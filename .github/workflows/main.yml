@@ -1,21 +1,22 @@
-name: Cypress Tests
-
+name: Test in Docker
 on: push
-
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+    # Cypress Docker image from https://hub.docker.com/r/cypress
+    # with browsers pre-installed
+    container:
+      name: cypress
+      image: cypress/browsers:latest
+      options: --user 1001
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
+      - uses: actions/checkout@v3
       - name: install
         run: cd packages/vscode-scripts && npm ci
       - name: start-server
-        run: docker-compose -f ./packages/vscode-scripts/docker-compose.yml up -d
-      - name: Cypress run
-        uses: cypress-io/github-action@v5
+        run: docker exec -d cypress npm run code-server-up
+      - uses: cypress-io/github-action@v5
         with:
+          browser: chrome
           build: npm run package
           config-file: cypress/cypress.config.ts
