@@ -6,11 +6,13 @@ describe('template spec', () => {
     })
     it('has two webviews', () => {
         cy.loadVSCode()
-        cy.get('.monaco-workbench > div > iframe', {timeout: 20000}).should('have.length', 2)
+        cy.get('.composite-bar .actions-container').find('li.action-item.icon').last().click()
+        cy.get('.monaco-workbench > div > iframe').should('have.length', 2)
     })
     it('one webview contains an information button that triggers showInformationMessage', () => {
         cy.loadVSCode()
-        cy.get('.monaco-workbench > div > iframe', {timeout: 20000}).should('have.length', 2).first().should(iframe => expect(iframe.contents().find(`iframe#active-frame[title="${viewId}"]`)).to.exist)
+        cy.get('.composite-bar .actions-container').find('li.action-item.icon').last().click()
+        cy.get('.monaco-workbench > div > iframe').should('have.length', 2).first().should(iframe => expect(iframe.contents().find(`iframe#active-frame[title="${viewId}"]`)).to.exist)
             .then(iframe => cy.wrap(iframe.contents().find(`iframe[title="box"]`)))
             .then(iframe => {
                 cy.log('iframe', iframe)
