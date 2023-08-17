@@ -17,9 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup Docker Compose
-        run: |
-          apk add --no-cache docker-compose
-          service docker start
+        run: service docker start
       - name: install
         run: cd packages/vscode-scripts && npm ci
       - name: Start code-server and wait
