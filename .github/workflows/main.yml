@@ -5,16 +5,16 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+    # Cypress Docker image from https://hub.docker.com/r/cypress
+    # with browsers pre-installed
+    container:
+      image: cypress/browsers:latest
+      options: --user 1001
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: install
-        run: cd packages/vscode-scripts && npm ci
-      - name: Cypress run
-        uses: cypress-io/github-action@v5
+      - uses: actions/checkout@v3
+      - uses: cypress-io/github-action@v5
         with:
+          browser: chrome
           build: npm run package
           start: npm run code-server-up && wait-on http://localhost:8080
           config-file: cypress/cypress.config.ts
