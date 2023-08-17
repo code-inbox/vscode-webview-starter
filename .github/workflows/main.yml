@@ -5,29 +5,17 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
-    # Cypress Docker image from https://hub.docker.com/r/cypress
-    # with browsers pre-installed
-    container:
-      image: cypress/browsers:latest
-      options: --user 1001
-    services:
-      docker:
-        image: docker:latest
-        options: --privileged
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Docker Compose
-        run: |
-          curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          chmod +x /usr/local/bin/docker-compose
-          docker-compose --version
+      - name: Checkout
+        uses: actions/checkout@v3
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
       - name: install
         run: cd packages/vscode-scripts && npm ci
-      - name: Start code-server and wait
-        run: npm run code-server-up && wait-on http://localhost:8080
-      - uses: cypress-io/github-action@v5
+      - name: start-server
+        run: docker-compose up -d
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
         with:
-          browser: chrome
           build: npm run package
-          start: echo "Cypress tests are ready to run"
           config-file: cypress/cypress.config.ts
