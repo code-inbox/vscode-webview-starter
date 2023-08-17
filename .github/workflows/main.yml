@@ -12,11 +12,9 @@ jobs:
       # and run all Cypress tests
       - name: install
         run: cd packages/vscode-scripts && npm ci
-      - name: Codercom
-        uses: codercom/code-server
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           build: npm run package
-          start: npm run code-server-up
+          start: npm run code-server-up && wait-on http://localhost:8080
           config-file: cypress/cypress.config.ts
