@@ -10,11 +10,8 @@ jobs:
     container:
       image: cypress/browsers:latest
       options: --user 1001
-    services:
-      docker:
-        image: docker:latest
-        options: --privileged
     steps:
+      - uses: actions/setup-node@v3
       - uses: actions/checkout@v3
       - name: install
         run: cd packages/vscode-scripts && npm ci
