@@ -16,8 +16,11 @@ jobs:
         options: --privileged
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Docker Compose
-        run: service docker start
+      - name: Install Docker Compose
+        run: |
+          curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
       - name: install
         run: cd packages/vscode-scripts && npm ci
       - name: Start code-server and wait
