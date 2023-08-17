@@ -12,8 +12,8 @@ jobs:
       # and run all Cypress tests
       - name: install
         run: cd packages/vscode-scripts && npm ci
-      - name: Start dev server
-        uses: codercom/code-server:latest
+      - name: Codercom
+        uses: codercom/code-server
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
