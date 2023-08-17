@@ -22,3 +22,5 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           config-file: cypress/cypress.config.ts
+          browser: chrome
+          record: true
