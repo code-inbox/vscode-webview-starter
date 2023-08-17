@@ -13,7 +13,7 @@ jobs:
       - name: install
         run: cd packages/vscode-scripts && npm ci
       - name: package
-        run: npm build && npx vsce package --no-dependencies --out vscode-starter-1.0.0.vsix
+        run: npm run build && npx vsce package --no-dependencies --out vscode-starter-1.0.0.vsix
       - name: start-server
         run: docker-compose -f ./packages/vscode-scripts/docker-compose.yml up -d && docker exec vscodeExtension code-server --install-extension /source/vscode-starter-1.0.0.vsix
       - name: Cypress run
