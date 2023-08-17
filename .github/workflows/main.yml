@@ -17,4 +17,4 @@ jobs:
         with:
           build: npm run package
           start: npm run code-server-up
-          config-file: cypress/cypress-config.ts
+          config-file: ../cypress/cypress-config.ts
