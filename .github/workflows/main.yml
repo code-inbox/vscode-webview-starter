@@ -10,14 +10,23 @@ jobs:
     container:
       image: cypress/browsers:latest
       options: --user 1001
+    services:
+      docker:
+        image: docker:latest
+        options: --privileged
     steps:
-      - uses: actions/setup-node@v3
       - uses: actions/checkout@v3
+      - name: Setup Docker Compose
+        run: |
+          apk add --no-cache docker-compose
+          service docker start
       - name: install
         run: cd packages/vscode-scripts && npm ci
+      - name: Start code-server and wait
+        run: npm run code-server-up && wait-on http://localhost:8080
       - uses: cypress-io/github-action@v5
         with:
           browser: chrome
           build: npm run package
-          start: npm run code-server-up && wait-on http://localhost:8080
+          start: echo "Cypress tests are ready to run"
           config-file: cypress/cypress.config.ts
