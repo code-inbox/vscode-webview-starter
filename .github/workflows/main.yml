@@ -15,12 +15,6 @@ jobs:
       - name: Start dev server
         uses: codercom/code-server:latest
         run: /source --auth none --disable-telemetry --disable-workspace-trust
-        with:
-          container_name: vscodeExtension
-          ports:
-            - 8080:8080
-          volumes:
-            - .:/source
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
