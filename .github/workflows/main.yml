@@ -13,7 +13,7 @@ jobs:
       - name: install
         run: cd packages/vscode-scripts && npm ci
       - name: start-server
-        run: docker-compose up -d -f ./packages/vscode-scripts/docker-compose.yml
+        run: docker-compose -f ./packages/vscode-scripts/docker-compose.yml up -d
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
