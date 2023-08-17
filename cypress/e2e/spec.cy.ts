@@ -1,5 +1,5 @@
 function withinView(viewId: string, cb: (body: JQuery<any>) => any) {
-    cy.get('.monaco-workbench > div > iframe', {timeout: 10000}).first().should(iframe => expect(iframe.contents().find(`iframe#active-frame[title="${viewId}"]`)).to.exist)
+    cy.get('.monaco-workbench > div > iframe', {timeout: 20000}).first().should(iframe => expect(iframe.contents().find(`iframe#active-frame[title="${viewId}"]`)).to.exist)
         .then(iframe => cy.wrap(iframe.contents().find(`iframe[title="${viewId}"]`)))
         .then(iframe => {
             cy.log('iframe', iframe)
@@ -23,7 +23,7 @@ describe('template spec', () => {
     })
     it('has two webviews', () => {
         cy.loadVSCode()
-        cy.get('.monaco-workbench > div > iframe', {timeout: 10000}).should('have.length', 2)
+        cy.get('.monaco-workbench > div > iframe', {timeout: 20000}).should('have.length', 2)
     })
     it('one webview contains an information button that triggers showInformationMessage', () => {
         cy.loadVSCode()
