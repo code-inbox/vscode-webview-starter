@@ -12,6 +12,8 @@ jobs:
       options: --user 1001
     steps:
       - uses: actions/checkout@v3
+      - name: install
+        run: cd packages/vscode-scripts && npm ci
       - uses: cypress-io/github-action@v5
         with:
           browser: chrome
