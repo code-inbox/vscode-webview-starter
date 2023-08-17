@@ -57,6 +57,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-svelte": "^7.1.6",
     "ts-node": "^10.9.1",
-    "tslib": "^2.6.1"
+    "tslib": "^2.6.1",
+    "vsce": "^2.15.0"
   }
 }
