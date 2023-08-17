@@ -24,11 +24,12 @@ export default function Box() {
           ))}
         </ul>
         <button
+          data-cy="show-information-message"
           onClick={() => {
             vscode("window.showInformationMessage", ["It works!"])
           }}
         >
-          Show information message
+          Show Information Message
         </button>
       </div>
     </div>

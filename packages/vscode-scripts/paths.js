@@ -11,4 +11,4 @@ export const resolveApp = (relativePath) =>
 
 export const resolveOwn = relativePath => path.resolve(__dirname, relativePath);
 
-export const appRelativeToOwn = relativePath => path.relative(resolveOwn('.'), resolveApp(relativePath));
+export const relativeToApp = relativePath => path.relative(resolveApp(relativePath), resolveOwn('.'));

@@ -1,5 +1,5 @@
 {
-  "name": "vscode_starter",
+  "name": "vscode-starter",
   "version": "1.0.0",
   "description": "",
   "main": "dist/node/extension.js",
@@ -11,11 +11,14 @@
     "build": "packages/vscode-scripts/bin/vscode-scripts.js build",
     "start": "packages/vscode-scripts/bin/vscode-scripts.js start",
     "open": "code --extensionDevelopmentPath=${PWD}",
-    "package": "vsce package --no-dependencies",
+    "package": "npm run build && packages/vscode-scripts/bin/vscode-scripts.js package",
     "publish": "vsce publish --no-dependencies",
-    "publish-scripts": "cd packages/vscode-scripts && npm run bump-patch && npm publish"
+    "publish-scripts": "cd packages/vscode-scripts && npm run bump-patch && npm publish",
+    "code-server-up": "packages/vscode-scripts/bin/vscode-scripts.js code-server-up",
+    "code-server-down": "packages/vscode-scripts/bin/vscode-scripts.js code-server-down",
+    "e2e": "npm run package && npm run code-server-up && cypress open --config-file cypress/cypress.config.ts"
   },
-  "publisher": "vscode_starter",
+  "publisher": "vscode-starter",
   "icon": "public/ping-logo.png",
   "keywords": [],
   "author": "",
@@ -23,7 +26,9 @@
   "devDependencies": {
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.18",
-    "@types/vscode": "^1.74.0"
+    "@types/vscode": "^1.74.0",
+    "cypress": "^12.17.4",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -47,8 +52,14 @@
     "views": {
       "container": [
         {
-          "id": "list",
-          "name": "list",
+          "id": "box",
+          "name": "box",
+          "type": "webview",
+          "initialSize": 4
+        },
+        {
+          "id": "box2",
+          "name": "box2",
           "type": "webview",
           "initialSize": 4
         }

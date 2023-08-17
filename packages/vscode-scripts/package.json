@@ -33,6 +33,7 @@
     "typescript"
   ],
   "author": "Matt Oxley <matt@magicbell.io>",
+  "publisher": "CodeInbox",
   "license": "MIT",
   "dependencies": {
     "@rollup/plugin-alias": "^5.0.0",
