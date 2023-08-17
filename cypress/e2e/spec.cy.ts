@@ -1,20 +1,3 @@
-function withinView(viewId: string, cb: (body: JQuery<any>) => any) {
-    cy.get('.monaco-workbench > div > iframe', {timeout: 20000}).first().should(iframe => expect(iframe.contents().find(`iframe#active-frame[title="${viewId}"]`)).to.exist)
-        .then(iframe => cy.wrap(iframe.contents().find(`iframe[title="${viewId}"]`)))
-        .then(iframe => {
-            cy.log('iframe', iframe)
-            cy.wrap(iframe).should(iframe => expect(iframe.contents().find('body')).to.exist).then(iframe => {
-                cy.wrap(iframe.contents().find('body')).then(body => {
-                    cy.wrap(body).should(body => expect(body.find('div').children().length).to.be.gte(1)).within({}, body => {
-                        cb(body)
-                    })
-
-                })
-            })
-        })
-}
-
-
 describe('template spec', () => {
     it('adds a dedicated icon to the activity bar, taking the total icons from 5 to 6', () => {
         cy.loadVSCode()
@@ -27,9 +10,19 @@ describe('template spec', () => {
     })
     it('one webview contains an information button that triggers showInformationMessage', () => {
         cy.loadVSCode()
-        withinView("box", body => {
-            body.find('button').click()
-        })
+        cy.get('.monaco-workbench > div > iframe', {timeout: 20000}).should('have.length', 2).first().should(iframe => expect(iframe.contents().find(`iframe#active-frame[title="${viewId}"]`)).to.exist)
+            .then(iframe => cy.wrap(iframe.contents().find(`iframe[title="box"]`)))
+            .then(iframe => {
+                cy.log('iframe', iframe)
+                cy.wrap(iframe).should(iframe => expect(iframe.contents().find('body')).to.exist).then(iframe => {
+                    cy.wrap(iframe.contents().find('body')).then(body => {
+                        cy.wrap(body).should(body => expect(body.find('div').children().length).to.be.gte(1)).within({}, body => {
+                            cy.wrap(body).find('button').contains('Information').click()
+                        })
+
+                    })
+                })
+            })
         cy.get(".notification-list-item-message").should('contain', 'It works!')
     })
 })
