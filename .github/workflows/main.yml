@@ -14,7 +14,6 @@ jobs:
         run: cd packages/vscode-scripts && npm ci
       - name: Start dev server
         uses: codercom/code-server:latest
-        run: /source --auth none --disable-telemetry --disable-workspace-trust
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
