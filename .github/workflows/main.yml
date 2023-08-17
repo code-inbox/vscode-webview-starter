@@ -12,6 +12,8 @@ jobs:
       # and run all Cypress tests
       - name: install
         run: cd packages/vscode-scripts && npm ci
+      - name: Set up Docker
+        uses: docker/setup-docker@v2
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
