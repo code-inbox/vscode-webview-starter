@@ -31,6 +31,9 @@ declare namespace Cypress {
         getWebviews(): Chainable<any>;
         getIframeBody(): Chainable<any>;
         ensureViewContainerActive(): Chainable<any>;
+        iframeOnload(args?: any): any;
+        iframeDirect(args?: any): any;
+
     }
 }
 
@@ -46,14 +49,6 @@ Cypress.Commands.add(
                     .callsFake((message) =>
                         Cypress.log({
                             name: 'error',
-                            message,
-                        })
-                    );
-                cy.stub(win.console, 'log')
-                    .as('consoleLog')
-                    .callsFake((message) =>
-                        Cypress.log({
-                            name: 'loggg',
                             message,
                         })
                     );
@@ -105,3 +100,17 @@ Cypress.Commands.add('ensureViewContainerActive', () => {
                 .then(item => cy.wrap(item).click())
         })
 })
+
+Cypress.Commands.add('iframeOnload', {prevSubject: 'element'}, $iframe => {
+    return new Cypress.Promise(resolve => {
+        $iframe.on('load', () => {
+            resolve($iframe.contents().find('body'));
+        });
+    });
+});
+
+Cypress.Commands.add('iframeDirect', {prevSubject: 'element'}, $iframe => {
+    return new Cypress.Promise(resolve => {
+        resolve($iframe.contents().find('body'));
+    });
+});
