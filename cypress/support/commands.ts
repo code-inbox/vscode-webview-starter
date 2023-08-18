@@ -73,11 +73,11 @@ Cypress.Commands.add('getIframeBody', () => {
         .get('.monaco-workbench > div > iframe', {log: false}).should('have.length', 2)
         .its('0.contentDocument.body', {log: false}).should('not.be.empty')
         .then((body) => cy.wrap(body, {log: false}))
-        .its('0', {log: false, timeout: 15000}).invoke('querySelector', 'iframe#active-frame').should('not.be.null')
+        .its('0', {log: false}).invoke('querySelector', 'iframe#active-frame').should('not.be.null')
         .then(iframe => cy.wrap(iframe, {log: false}))
         .its('0.contentDocument.body', {log: false}).should('not.be.empty')
         .then((body) => cy.wrap(body, {log: false}))
-        // .its('0', {log: false, timeout: 15000}).invoke('querySelector', 'button').should('not.be.null') // todo check for emptiness
+        .its('0', {log: false, timeout: 20000}).invoke('querySelector', 'button').should('not.be.null') // todo check for emptiness
         // .then((root) => cy.wrap(root, {log: false}))
 })
 
