@@ -63,6 +63,8 @@ class ViewProvider implements vscode.WebviewViewProvider {
         const nonce = this.getNonce()
         const path = this.getWebviewUri()
 
+        console.warn(`TRYING TO RENDER: ${path}, ${fs.existsSync(path!)}`)
+
         this.webview.html = `<!DOCTYPE html>
     <html lang="en">
       <head>
