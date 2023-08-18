@@ -4,7 +4,7 @@ on: push
 
 jobs:
   cypress-run:
-    runs-on: macos-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,7 +23,7 @@ jobs:
         with:
           config-file: cypress/cypress.config.ts
           browser: chrome
-          record: true
+          # record: true
         env:
           # pass the Cypress Cloud record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
