@@ -73,7 +73,7 @@ Cypress.Commands.add('getIframeBody', () => {
         .get('.monaco-workbench > div > iframe', {log: false}).should('have.length', 2)
         .its('0.contentDocument.body', {log: false}).should('not.be.empty')
         .then((body) => cy.wrap(body, {log: false}))
-        .its('0.childNodes', {log: false}).should('have.length.gte', 4)
+        .its('0.childNodes', {log: false, timeout: 15000}).should('have.length.gte', 4)
         .its('3', {log: false}).should('have.id', 'active-frame')
         .then(iframe => cy.wrap(iframe, {log: false}))
         .its('0.contentDocument.body', {log: false}).should('not.be.empty')
