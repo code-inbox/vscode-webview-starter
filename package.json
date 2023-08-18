@@ -28,6 +28,7 @@
     "@types/react": "^18.2.18",
     "@types/vscode": "^1.74.0",
     "cypress": "^12.17.4",
+    "cypress-iframe": "^1.0.1",
     "typescript": "^5.1.6",
     "vsce": "^2.15.0"
   },

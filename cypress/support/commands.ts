@@ -29,6 +29,8 @@ declare namespace Cypress {
     interface Chainable<Subject> {
         loadVSCode(): void;
         getWebviews(): Chainable<any>;
+        getIframeBody(): Chainable<any>;
+        ensureViewContainerActive(): void;
     }
 }
 
@@ -49,6 +51,7 @@ Cypress.Commands.add(
                     );
             },
         });
+        cy.getIframeBody
     }
 );
 
@@ -59,3 +62,27 @@ Cypress.Commands.add(
         return cy.get('.monaco-workbench').find('iframe');
     }
 )
+
+
+Cypress.Commands.add('getIframeBody', () => {
+    // get the iframe > document > body
+    // and retry until the body element is not empty
+    cy.log('getIframeBody')
+
+    return cy
+        .get('.monaco-workbench > div > iframe', {log: false}).should('have.length', 2)
+        .its('0.contentDocument.body', {log: false}).should('not.be.empty')
+        .then((body) => cy.wrap(body, {log: false}))
+        .its('0.childNodes[3]', {log: false}).should('have.id', 'active-frame')
+        .then(iframe => cy.wrap(iframe, {log: false}))
+        .its('0.contentDocument.body', {log: false}).should('not.be.empty')
+        .then((body) => cy.wrap(body, {log: false}))
+        .find('div#root', {log: false})
+        .then((root) => cy.wrap(root, {log: false}))
+        .should('not.be.empty')
+        .then((body) => cy.wrap(body, {log: false}))
+})
+
+Cypress.Commands.add('ensureViewContainerActive', () => {
+
+})
