@@ -58,6 +58,7 @@
     "rollup-plugin-svelte": "^7.1.6",
     "ts-node": "^10.9.1",
     "tslib": "^2.6.1",
-    "vsce": "^2.15.0"
+    "vsce": "^2.15.0",
+    "zustand": "^4.4.1"
   }
 }
