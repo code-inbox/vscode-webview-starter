@@ -49,6 +49,22 @@ Cypress.Commands.add(
                             message,
                         })
                     );
+                cy.stub(win.console, 'log')
+                    .as('consoleLog')
+                    .callsFake((message) =>
+                        Cypress.log({
+                            name: 'log',
+                            message,
+                        })
+                    );
+                cy.stub(win.console, 'warn')
+                    .as('consoleWarn')
+                    .callsFake((message) =>
+                        Cypress.log({
+                            name: 'warn',
+                            message,
+                        })
+                    );
             },
         });
         cy.getIframeBody
