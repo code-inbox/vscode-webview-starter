@@ -5,7 +5,7 @@ import 'cypress-iframe'
 // https://docs.cypress.io/guides/core-concepts/introduction-to-cypress
 // const $cyElement = cy.get('.element') // does NOT work
 
-describe('template spec', () => {
+describe('Smoke tests', () => {
     before(() => {
         cy.loadVSCode()
     })

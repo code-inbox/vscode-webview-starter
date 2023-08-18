@@ -87,7 +87,7 @@ Cypress.Commands.add('ensureViewContainerActive', () => {
     cy.get('.composite-bar .actions-container .action-item').its('0')
         .then(item => cy.wrap(item).click())
         .then(() => {
-            cy.get('.composite-bar .actions-container .action-item').its('5')
+            cy.get('.composite-bar .actions-container .action-item').should('have.length', 6).its('5')
                 .then(item => cy.wrap(item).click())
         })
 })
