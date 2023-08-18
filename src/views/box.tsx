@@ -7,7 +7,10 @@ import styles from "./box.module.css"
 
 const [_store, vscode] = getChromiumStore<State>()
 
+console.log("nbox code running")
+
 export default function Box() {
+  console.log("mounging box")
   const store = useStore(_store)
 
   return (

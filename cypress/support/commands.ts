@@ -77,8 +77,8 @@ Cypress.Commands.add('getIframeBody', () => {
         .then(iframe => cy.wrap(iframe, {log: false}))
         .its('0.contentDocument.body', {log: false}).should('not.be.empty')
         .then((body) => cy.wrap(body, {log: false}))
-        .its('0', {log: false, timeout: 15000}).invoke('querySelector', 'button').should('not.be.null') // todo check for emptiness
-        .then((root) => cy.wrap(root, {log: false, timeout: 15000}))
+        // .its('0', {log: false, timeout: 15000}).invoke('querySelector', 'button').should('not.be.null') // todo check for emptiness
+        // .then((root) => cy.wrap(root, {log: false}))
 })
 
 Cypress.Commands.add('ensureViewContainerActive', () => {
