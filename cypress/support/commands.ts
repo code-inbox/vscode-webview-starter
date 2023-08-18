@@ -41,19 +41,19 @@ Cypress.Commands.add(
         const url = "http://localhost:8080";
         cy.visit(url, {
             onBeforeLoad(win) {
-                cy.stub(win.console, 'error')
-                    .as('consoleError')
-                    .callsFake((message) =>
-                        Cypress.log({
-                            name: 'error',
-                            message,
-                        })
-                    );
+                // cy.stub(win.console, 'error')
+                //     .as('consoleError')
+                //     .callsFake((message) =>
+                //         Cypress.log({
+                //             name: 'error',
+                //             message,
+                //         })
+                //     );
                 cy.stub(win.console, 'log')
                     .as('consoleLog')
                     .callsFake((message) =>
                         Cypress.log({
-                            name: 'log',
+                            name: 'loggg',
                             message,
                         })
                     );
@@ -61,7 +61,7 @@ Cypress.Commands.add(
                     .as('consoleWarn')
                     .callsFake((message) =>
                         Cypress.log({
-                            name: 'warn',
+                            name: 'warnnn',
                             message,
                         })
                     );
