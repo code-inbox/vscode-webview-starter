@@ -7,7 +7,9 @@ import styles from "./box.module.css"
 
 const [_store, vscode] = getChromiumStore<State>()
 
-console.log("nbox code running")
+vscode("window.showInformationMessage", [
+  `Mounting. React ${!!React} Zustand: ${!!useStore}`,
+])
 
 export default function Box() {
   console.log("mounging box")

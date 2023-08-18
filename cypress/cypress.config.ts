@@ -10,5 +10,5 @@ module.exports = defineConfig({
         },
         testIsolation: false,
         record: true,
-    }
+    },
 })

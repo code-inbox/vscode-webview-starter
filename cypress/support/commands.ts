@@ -60,6 +60,14 @@ Cypress.Commands.add(
                             message,
                         })
                     );
+                cy.stub(win.console, 'log')
+                    .as('consoleLog')
+                    .callsFake((message) =>
+                        Cypress.log({
+                            name: 'loggg',
+                            message,
+                        })
+                    );
             },
         });
         cy.getIframeBody
