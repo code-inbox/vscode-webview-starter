@@ -10,10 +10,12 @@ describe('template spec', () => {
         cy.loadVSCode()
     })
     it('features a button that when clicked, triggers a vscode informationMessage', () => {
-        cy.get('.composite-bar .actions-container').find('li.action-item.icon').should('have.length', 6)
+        cy.get('.monaco-workbench .content').its('0').should('not.be.null')
+        cy.ensureViewContainerActive()
         cy.getIframeBody().within(body => {
             body.find('button').click()
         })
         cy.get(".notification-list-item-message").should('contain', 'It works!')
+
     })
 })

@@ -30,7 +30,7 @@ declare namespace Cypress {
         loadVSCode(): void;
         getWebviews(): Chainable<any>;
         getIframeBody(): Chainable<any>;
-        ensureViewContainerActive(): void;
+        ensureViewContainerActive(): Chainable<any>;
     }
 }
 
@@ -84,5 +84,10 @@ Cypress.Commands.add('getIframeBody', () => {
 })
 
 Cypress.Commands.add('ensureViewContainerActive', () => {
-
+    cy.get('.composite-bar .actions-container .action-item').its('0')
+        .then(item => cy.wrap(item).click())
+        .then(() => {
+            cy.get('.composite-bar .actions-container .action-item').its('5')
+                .then(item => cy.wrap(item).click())
+        })
 })
