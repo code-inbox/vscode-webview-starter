@@ -15,12 +15,7 @@ describe('Smoke tests', () => {
             .then(iframe => cy.wrap(iframe)).its('0.contentDocument.body', {log: false}).should('not.be.empty').then(ifb => cy.wrap(ifb)).as('iframeBody')
     })
     it('features a button that when clicked, triggers a vscode informationMessage', function () {
-        cy.wrap(this.iframeBody.find('script')).debug()
-        // 
-
-        // cy.get('.monaco-menu .action-item-menu').contains('View').click()
-
-        // cy.get(".notification-list-item-message").should('contain', 'It works!')
+        cy.wrap(this.iframeBody.find('#root')).should('not.be.empty')
     })
 })
 
