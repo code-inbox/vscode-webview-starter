@@ -74,7 +74,9 @@ const config = [
       postcss({
         modules: true,
       }),
-      nodeResolve({}),
+      nodeResolve({
+        modulePaths: [resolveApp("node_modules"), resolveOwn("node_modules")],
+      }),
       ...frameworkConfig.plugins,
       ...standardPlugins,
     ],

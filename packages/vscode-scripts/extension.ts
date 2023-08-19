@@ -75,8 +75,9 @@ class ViewProvider implements vscode.WebviewViewProvider {
       </head>
   
       <body data-view-type="${this.viewId}" style="background: #1D1F28;">
+
         <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
+        <div id="root" style="color:white"></div>
 
         <script nonce="${nonce}">
             window.__INITIAL_DATA__ = ${JSON.stringify(data)};
