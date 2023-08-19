@@ -12,7 +12,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18"
-      - run: cd packages/vscode-scripts && npm ci
       - name: Bumping version
         uses: "phips28/gh-action-bump-version@master"
         env:
