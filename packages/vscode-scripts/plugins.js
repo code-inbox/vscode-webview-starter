@@ -13,10 +13,6 @@ import { createRoot } from 'react-dom/client';
 import Component from './${id.slice(id.lastIndexOf("/") + 1, -4)}';
 const root = createRoot(document.getElementById('root'));
 root.render(<Component />);`
-        console.log(
-          "hellooooo",
-          `import Component from './${id.slice(id.lastIndexOf("/") + 1, -4)}'`
-        )
       }
       return code
     },

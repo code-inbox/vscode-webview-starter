@@ -44,31 +44,11 @@ Cypress.Commands.add(
         const url = "http://localhost:8080";
         cy.visit(url, {
             onLoad(win) {
-                console.log('win', win)
-                window.onerror = (message, source, lineno, colno, error) => {
-                    console.log('boo!', message)
-                }
                 cy.stub(win.console, 'error')
                     .as('consoleError')
                     .callsFake((message) =>
                         Cypress.log({
                             name: 'error',
-                            message,
-                        })
-                    );
-                cy.stub(win.console, 'warn')
-                    .as('consoleWarn')
-                    .callsFake((message) =>
-                        Cypress.log({
-                            name: 'warnnn',
-                            message,
-                        })
-                    );
-                cy.stub(win.console, 'log')
-                    .as('consoleLog')
-                    .callsFake((message) =>
-                        Cypress.log({
-                            name: 'loggg',
                             message,
                         })
                     );
@@ -101,7 +81,6 @@ Cypress.Commands.add('getIframeBody', () => {
         .its('0.contentDocument.body', {log: false}).should('not.be.empty')
         .then((body) => cy.wrap(body, {log: false}))
         .its('0', {log: false}).invoke('querySelector', 'button').should('not.be.null') // todo check for emptiness
-    // .then((root) => cy.wrap(root, {log: false}))
 })
 
 Cypress.Commands.add('ensureViewContainerActive', () => {

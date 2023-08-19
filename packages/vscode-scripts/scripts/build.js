@@ -14,12 +14,6 @@ loadConfigFile(path.resolve(__dirname, "../rollup.config.js")).then(
   async ({ options, warnings }) => {
     // "warnings" wraps the default `onwarn` handler passed by the CLI.
     // This prints all warnings up to this point:
-    console.log(
-      `We currently have ${warnings.count} warnings`,
-      JSON.stringify(options[0].plugins)
-    )
-
-    console.log("Environment", process.env.NODE_ENV)
 
     contributes()
 

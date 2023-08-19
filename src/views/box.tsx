@@ -7,12 +7,9 @@ import styles from "./box.module.css"
 
 const [_store, vscode] = getChromiumStore<State>()
 
-vscode("window.showInformationMessage", [
-  `Mounting. React ${!!React} Zustand: ${!!useStore}`,
-])
+vscode("window.showInformationMessage", [`Loaded!`])
 
 export default function Box() {
-  console.log("mounging box")
   const store = useStore(_store)
 
   return (
@@ -28,14 +25,6 @@ export default function Box() {
             </>
           ))}
         </ul>
-        <button
-          data-cy="show-information-message"
-          onClick={() => {
-            vscode("window.showInformationMessage", ["It works!"])
-          }}
-        >
-          Show Information Message
-        </button>
       </div>
     </div>
   )

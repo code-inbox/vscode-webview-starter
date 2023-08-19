@@ -15,18 +15,7 @@ describe('Smoke tests', () => {
             .then(iframe => cy.wrap(iframe)).its('0.contentDocument.body', {log: false}).should('not.be.empty').then(ifb => cy.wrap(ifb)).as('iframeBody')
     })
     it('features a button that when clicked, triggers a vscode informationMessage', function () {
-        cy.wrap(this.iframeBody.find('#root')).should('not.be.empty')
+        cy.wrap(this.iframeBody).find('#root').should('not.be.empty')
+        cy.get(".notification-list-item-message").should('contain', 'Loaded!')
     })
 })
-
-
-
-
-/**
- *      cy.get('.menubar-menu-title.toolbar-toggle-more.codicon.codicon-menubar-more').click()
-        cy.get('.action-menu-item.monaco-submenu-item').contains('View').click()
-        cy.get('.action-menu-item').contains('Command Palette').click()
-        cy.type('Toggle developer tools')
-        // type enter
-        cy.type('{enter}')
- */

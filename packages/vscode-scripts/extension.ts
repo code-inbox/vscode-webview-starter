@@ -63,11 +63,6 @@ class ViewProvider implements vscode.WebviewViewProvider {
         const nonce = this.getNonce()
         const path = this.getWebviewUri()
 
-        console.warn(`TRYING TO RENDER: ${path}, ${fs.existsSync('/home/coder/.local/share/code-server/extensions/vscode-starter.vscode-starter-1.0.0/dist/chromium/box.js')}`)
-        console.log("CONTENTS " + JSON.stringify(fs.readdirSync('/home/coder/.local/share/code-server/extensions/')))
-        console.log("CONTENTS 2 " + JSON.stringify(fs.readdirSync('/home/coder/.local/share/code-server/extensions/vscode-starter.vscode-starter-1.0.0/dist')))
-
-
         this.webview.html = `<!DOCTYPE html>
     <html lang="en">
       <head>
