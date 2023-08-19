@@ -59,12 +59,6 @@
           "name": "box",
           "type": "webview",
           "initialSize": 4
-        },
-        {
-          "id": "box2",
-          "name": "box2",
-          "type": "webview",
-          "initialSize": 4
         }
       ]
     },
