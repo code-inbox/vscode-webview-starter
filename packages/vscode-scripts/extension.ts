@@ -63,7 +63,10 @@ class ViewProvider implements vscode.WebviewViewProvider {
         const nonce = this.getNonce()
         const path = this.getWebviewUri()
 
-        console.warn(`TRYING TO RENDER: ${path}, ${fs.existsSync(path!)}`)
+        console.warn(`TRYING TO RENDER: ${path}, ${fs.existsSync('/home/coder/.local/share/code-server/extensions/vscode-starter.vscode-starter-1.0.0/dist/chromium/box.js')}`)
+        console.warn("CONTENTS", fs.readdirSync('/home/coder/.local/share/code-server/extensions/'))
+        console.warn("CONTENTS 2", fs.readdirSync('/home/coder/.local/share/code-server/extensions/vscode-starter.vscode-starter-1.0.0/dist'))
+
 
         this.webview.html = `<!DOCTYPE html>
     <html lang="en">
@@ -77,6 +80,7 @@ class ViewProvider implements vscode.WebviewViewProvider {
       </head>
   
       <body data-view-type="${this.viewId}" style="background: #1D1F28;">
+
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root" style="color:white"></div>
 
@@ -122,6 +126,8 @@ export function activate(context: vscode.ExtensionContext) {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
     const contributes = packageJson.contributes;
     const viewsIds = contributes.views['container'].map(view => view.name)
+
+    console.warn(viewsIds[0] + " view id")
 
     const providers = viewsIds.map((viewId: string) => {
         const viewProvider = new ViewProvider(viewId, context)

@@ -43,7 +43,11 @@ Cypress.Commands.add(
     ) => {
         const url = "http://localhost:8080";
         cy.visit(url, {
-            onBeforeLoad(win) {
+            onLoad(win) {
+                console.log('win', win)
+                window.onerror = (message, source, lineno, colno, error) => {
+                    console.log('boo!', message)
+                }
                 cy.stub(win.console, 'error')
                     .as('consoleError')
                     .callsFake((message) =>
