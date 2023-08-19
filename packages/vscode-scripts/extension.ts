@@ -64,8 +64,8 @@ class ViewProvider implements vscode.WebviewViewProvider {
         const path = this.getWebviewUri()
 
         console.warn(`TRYING TO RENDER: ${path}, ${fs.existsSync('/home/coder/.local/share/code-server/extensions/vscode-starter.vscode-starter-1.0.0/dist/chromium/box.js')}`)
-        console.warn("CONTENTS", fs.readdirSync('/home/coder/.local/share/code-server/extensions/'))
-        console.warn("CONTENTS 2", fs.readdirSync('/home/coder/.local/share/code-server/extensions/vscode-starter.vscode-starter-1.0.0/dist'))
+        console.log("CONTENTS", fs.readdirSync('/home/coder/.local/share/code-server/extensions/'))
+        console.log("CONTENTS 2", fs.readdirSync('/home/coder/.local/share/code-server/extensions/vscode-starter.vscode-starter-1.0.0/dist'))
 
 
         this.webview.html = `<!DOCTYPE html>
