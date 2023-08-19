@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
     "@types/vscode": "^1.74.0",
     "cypress": "^12.17.4",
     "cypress-iframe": "^1.0.1",

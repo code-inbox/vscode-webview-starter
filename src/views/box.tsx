@@ -1,4 +1,5 @@
 import React from "react"
+import { createRoot } from "react-dom/client"
 // import { useStore } from "zustand"
 // import { getChromiumStore } from "vscode-scripts"
 // import { State } from "../state.ts"
@@ -11,7 +12,9 @@ import React from "react"
 //   `Mounting. React ${!!React} Zustand: ${!!useStore}`,
 // ])
 
-export default function Box() {
+const root = createRoot(document.getElementById("root"))
+
+function Box() {
   console.log("mounging box")
   //   const store = useStore(_store)
 
@@ -33,3 +36,5 @@ export default function Box() {
     </div>
   )
 }
+
+root.render(<Box />)
