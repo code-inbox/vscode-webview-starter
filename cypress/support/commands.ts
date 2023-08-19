@@ -40,3 +40,11 @@ Cypress.Commands.add('ensureViewContainerActive', () => {
                 .then(item => cy.wrap(item).click())
         })
 })
+
+Cypress.Commands.add('iframeOnload', {prevSubject: 'element'}, $iframe => {
+    return new Cypress.Promise(resolve => {
+        $iframe.on('load', () => {
+            resolve($iframe.contents().find('body'));
+        });
+    });
+});
