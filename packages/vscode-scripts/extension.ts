@@ -122,8 +122,6 @@ export function activate(context: vscode.ExtensionContext) {
     const contributes = packageJson.contributes;
     const viewsIds = contributes.views['container'].map(view => view.name)
 
-    console.warn(viewsIds[0] + " view id")
-
     const providers = viewsIds.map((viewId: string) => {
         const viewProvider = new ViewProvider(viewId, context)
         viewProvider.register()

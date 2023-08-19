@@ -2,8 +2,6 @@ import { loadConfigFile } from "rollup/loadConfigFile"
 import path from "node:path"
 import { rollup } from "rollup"
 import contributes from "./contributes.js"
-import dotenv from "dotenv"
-dotenv.config()
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname)
 
