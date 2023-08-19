@@ -12,13 +12,13 @@ jobs:
           node-version: "18"
       - run: cd packages/vscode-scripts && npm ci
       - name: Bumping version
-        uses: jpb06/bump-package@latest
+        uses: "phips28/gh-action-bump-version@master"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGEJSON_DIR: "packages/vscode-scripts"
         with:
-          working-directory: packages/vscode-scripts
-          major-keywords: BREAKING CHANGE
-          minor-keywords: feat,minor
-          patch-keywords: fix,chore
-          should-default-to-patch: true
+          version-type: "patch"
+          tag-prefix: "v"
       - uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_TOKEN }}
