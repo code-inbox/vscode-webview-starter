@@ -15,7 +15,7 @@ jobs:
       - name: build
         run: npm run build && npx vsce package --no-dependencies --out packages/vscode-scripts/vscode-starter-1.0.0.vsix
       - name: list-files
-        run: ls dist/chromium
+        run: cat dist/chromium/box.js
       - name: start
         run: docker-compose -f ./packages/vscode-scripts/docker-compose.yml up -d && docker exec vscodeExtension code-server --install-extension /source/vscode-starter-1.0.0.vsix
       - name: Cypress run
