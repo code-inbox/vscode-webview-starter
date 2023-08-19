@@ -37,4 +37,8 @@ function Box() {
   )
 }
 
-root.render(<Box />)
+try {
+  root.render(<Box />)
+} catch (e) {
+  document.getElementById("root").innerHTML = `<div>Failed to mount: ${e}</div>`
+}
