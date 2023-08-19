@@ -13,8 +13,8 @@ jobs:
       - run: cd packages/vscode-scripts && npm ci
       - name: Bumping version
         uses: jpb06/bump-package@latest
-        working-directory: packages/vscode-scripts
         with:
+          working-directory: packages/vscode-scripts
           major-keywords: BREAKING CHANGE
           minor-keywords: feat,minor
           patch-keywords: fix,chore
