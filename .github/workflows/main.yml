@@ -10,13 +10,13 @@ jobs:
         uses: actions/checkout@v3
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
-      - name: install
+      - name: Install Nested Dependencies
         run: cd packages/vscode-scripts && npm ci
-      - name: build
+      - name: Build
         run: npm run build && npx vsce package --no-dependencies --out packages/vscode-scripts/vscode-starter-1.0.0.vsix
-      - name: list-files
+      - name: Print JS bundle (for debugging)
         run: cat dist/chromium/box.js
-      - name: start
+      - name: Start
         run: docker-compose -f ./packages/vscode-scripts/docker-compose.yml up -d && docker exec vscodeExtension code-server --install-extension /source/vscode-starter-1.0.0.vsix
       - name: Cypress run
         uses: cypress-io/github-action@v5

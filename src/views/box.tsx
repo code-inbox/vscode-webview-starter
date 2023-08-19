@@ -1,33 +1,37 @@
 import React from "react"
-import { createRoot } from "react-dom/client"
-// import { useStore } from "zustand"
-// import { getChromiumStore } from "vscode-scripts"
-// import { State } from "../state.ts"
+import { useStore } from "zustand"
+import { getChromiumStore } from "vscode-scripts"
+import { State } from "../state.ts"
 
-// import styles from "./box.module.css"
+import styles from "./box.module.css"
 
-// const [_store, vscode] = getChromiumStore<State>()
+const [_store, vscode] = getChromiumStore<State>()
 
-// vscode("window.showInformationMessage", [
-//   `Mounting. React ${!!React} Zustand: ${!!useStore}`,
-// ])
+vscode("window.showInformationMessage", [
+  `Mounting. React ${!!React} Zustand: ${!!useStore}`,
+])
 
-const root = createRoot(document.getElementById("root"))
-
-function Box() {
+export default function Box() {
   console.log("mounging box")
-  //   const store = useStore(_store)
+  const store = useStore(_store)
 
   return (
     <div>
-      <h1>Box</h1>
+      <h1 className={styles.heading}>Box</h1>
       <div>
         <h3>TODOS</h3>
-        <ul>Hi</ul>
+        <ul>
+          {store.todos.map((todo) => (
+            <>
+              <li key={todo}>{todo}</li>
+              <button onClick={() => store?.removeTodo(todo)}>Close</button>
+            </>
+          ))}
+        </ul>
         <button
           data-cy="show-information-message"
           onClick={() => {
-            // vscode("window.showInformationMessage", ["It works!"])
+            vscode("window.showInformationMessage", ["It works!"])
           }}
         >
           Show Information Message
@@ -35,10 +39,4 @@ function Box() {
       </div>
     </div>
   )
-}
-
-try {
-  root.render(<Box />)
-} catch (e) {
-  document.getElementById("root").innerHTML = `<div>Failed to mount: ${e}</div>`
 }
