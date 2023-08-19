@@ -1,5 +1,5 @@
 import { glob } from "glob"
-import path from "path"
+import path, { resolve } from "path"
 import { fileURLToPath } from "url"
 
 import postcss from "rollup-plugin-postcss"
@@ -91,7 +91,9 @@ const config = [
       postcss({
         modules: true,
       }),
-      nodeResolve({}),
+      nodeResolve({
+        modulePaths: [resolveApp("node_modules"), resolveOwn("node_modules")],
+      }),
       ...frameworkConfig.plugins,
       ...standardPlugins,
     ],
