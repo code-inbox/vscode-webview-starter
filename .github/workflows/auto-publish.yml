@@ -11,7 +11,14 @@ jobs:
         with:
           node-version: "18"
       - run: cd packages/vscode-scripts && npm ci
-      - run: cd packages/vscode-scripts && npm run bump-patch
+      - name: Bumping version
+        uses: jpb06/bump-package@latest
+        working-directory: packages/vscode-scripts
+        with:
+          major-keywords: BREAKING CHANGE
+          minor-keywords: feat,minor
+          patch-keywords: fix,chore
+          should-default-to-patch: true
       - uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_TOKEN }}
