@@ -13,7 +13,8 @@
     "scripts",
     "*.js",
     "*.json",
-    "*.ts"
+    "*.ts",
+    ".yml"
   ],
   "bin": {
     "vscode-scripts": "bin/vscode-scripts.js"
