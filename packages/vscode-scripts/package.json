@@ -1,6 +1,6 @@
 {
   "name": "vscode-scripts",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Configuration and scripts for VS Code extension development",
   "repository": {
     "type": "git",
