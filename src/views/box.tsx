@@ -16,7 +16,7 @@ export default function Box() {
     <div>
       <h1 className={styles.heading}>Box</h1>
       <div>
-        <h3>TODOS</h3>
+        <h3>TODOS (changed)</h3>
         <ul>
           {store.todos.map((todo) => (
             <>

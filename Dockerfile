@@ -13,4 +13,3 @@ RUN npm run package
 RUN code-server --install-extension packages/vscode-scripts/vscode-starter-1.0.0.vsix
 
 CMD ["/source", "--auth", "none", "--disable-telemetry", "--disable-workspace-trust"]
-
