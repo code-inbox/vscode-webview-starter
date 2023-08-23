@@ -74,10 +74,10 @@ class ViewProvider implements vscode.WebviewViewProvider {
         <meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https://api.rollbar.com/; img-src vscode-resource: vscode-webview: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">
       </head>
   
-      <body data-view-type="${this.viewId}" style="background: #1D1F28;">
+      <body data-view-type="${this.viewId}">
 
         <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root" style="color:white"></div>
+        <div id="root"></div>
 
         <script nonce="${nonce}">
             window.__INITIAL_DATA__ = ${JSON.stringify(data)};
